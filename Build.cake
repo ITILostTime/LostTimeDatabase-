@@ -1,26 +1,36 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
 #tool nuget:?package=GitVersion.CommandLine
 
-
+using System;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.IO;
 
 //////////////////////////////////////////////
 // Load / Add Script
 //////////////////////////////////////////////
 
 #load "./CakeFolder/CakeParameters.cake"
+#load "./CakeFolder/LostTimeInformation.cake"
 
 //////////////////////////////////////////////
 // Argument
 //////////////////////////////////////////////
 
 // Target to launch the build
-var target = Argument("Target", "Default");
+var target = Argument("target", "Default");
 
 // Folder To Clean
 public var CleanFolder = Argument("bin", "obj");
 
 //  Argument pour parcourir les dossiers du projet
 var configuration = Argument("configuration", "Release");
+
+//  Fichier ReleaseNotes
+public var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
+
+//  Dernière version du projet
+public string version = releaseNotes.Version.ToString();
 
 //////////////////////////////////////////////
 // Task
@@ -30,6 +40,9 @@ var configuration = Argument("configuration", "Release");
 Setup(ctx => 
 {
     Information("Started Build Project");
+    Information(version);
+
+    Versioning.ProjectVersion = version;
 });
 
 // Execute after last Task
@@ -95,14 +108,58 @@ Task("CopyFiles")
     .IsDependentOn("Version")
     .Does(() => 
     {
-        // à implémenté
+        EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin");
+
+        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin");
+        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.pdb", CakeParameters.BuildResultDirectory + "bin");
+        CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.dll", CakeParameters.BuildResultDirectory + "bin");
+        CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.pdb", CakeParameters.BuildResultDirectory + "bin");
+
+        CopyFiles(new FilePath[] {"License", "README.md", "ReleaseNotes.md"}, CakeParameters.BuildResultDirectory + "bin");
     });
 
 Task("CreateNugetPackage")
     .IsDependentOn("CopyFiles")
     .Does(() => 
     {
-        // à implémenté
+        var nuGetPackSettings = new NuGetPackSettings
+        {
+            Id = "LostTimeDB",
+            Version = Versioning.ProjectVersion,
+            Title = "LostTimeDB",
+            Authors = new[] 
+            {
+                "Guillaume Elisabeth"
+            },
+            Owners = new[] 
+            {
+                "LostTime"
+            },
+            Description = "Lost Time Database",
+            Summary = "All script to use LostTime database",
+            ProjectUrl = LostTimeInformation.ProjectUrl,
+            //LicenseUrl = LostTimeInformation.LicenseUrl,
+            Copyright = "Lost Time",
+            ReleaseNotes = releaseNotes.Notes.ToArray(),
+            Tags = new[] 
+            {
+                "Cake", "Script", "Build"
+            },
+            RequireLicenseAcceptance = false,
+            Symbols = false,
+            NoPackageAnalysis = true,
+            Files = new[] 
+            {
+                new NuSpecContent 
+                {
+                    Source = "LostTimeDB.dll", Target = "bin"
+                },
+            },
+            BasePath = CakeParameters.BuildResultDirectory + "bin",
+            OutputDirectory = CakeParameters.BuildResultDirectory,
+        };
+
+        NuGetPack(nuGetPackSettings);
     });
 
 Task("OctoPush")
@@ -160,7 +217,7 @@ Task("GitHubTag")
 //////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("GitHubPush");
+    .IsDependentOn("CreateNugetPackage");
 
 //////////////////////////////////////////////
 // Execution

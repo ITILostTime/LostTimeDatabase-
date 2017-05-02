@@ -49,5 +49,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LostTimeDB\LostTimeDB.csproj">
+      <Project>{175226ae-2ab5-4e44-a885-b26a2d1060f0}</Project>
+      <Name>LostTimeDB</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
