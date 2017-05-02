@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace LostTimeDB
 {
-    public class DatabaseConnection
+    public sealed class DatabaseConnection
     {
-
+        public string BuildCake(string text)
+        {
+            return (text);
+        }
     }
 }

@@ -11,7 +11,7 @@ public class CakeParameters
     public static string LostTimeDBTest = "./LostTimeDB/LostTimeDBTest/";
 
     //  Dossier contenant les Tests.dll
-    public static string ProjectApplicationTestDLL = "./CakeApplication/**/bin/";
+    public static string ProjectApplicationTestDLL = "./LostTimeDB/**/bin/";
 
     //  Dossier contenant les resultas du build
     public static string BuildResultDirectory = "./BuildResult/v" +  Versioning.ProjectVersion +  "/";
