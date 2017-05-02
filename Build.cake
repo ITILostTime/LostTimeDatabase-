@@ -49,6 +49,7 @@ Setup(ctx =>
 Teardown(ctx => 
 {
     Information("Finished Build Project");
+    Information("Last Project Version = " + Versioning.ProjectVersion);
 });
 
 Task("Clean")
@@ -98,10 +99,10 @@ Task("RunNUnitTest")
     });
 
 Task("Version")
-    .IsDependentOn("RunNUnitTest")
+    //.IsDependentOn("RunNUnitTest")
     .Does(() => 
     {
-        // à implémenté
+        Versioning.temporaireSemver();
     });
 
 Task("CopyFiles")
