@@ -15,7 +15,6 @@ namespace LostTimeDBTest
         {
             LostTimeDB.DatabaseConnection cakeBuild = new LostTimeDB.DatabaseConnection();
             Assert.That(cakeBuild.BuildCake("Cake Build OK").Equals("Cake Build OK"));
-
         }
     }
 

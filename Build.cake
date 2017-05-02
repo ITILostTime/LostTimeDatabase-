@@ -52,6 +52,7 @@ Teardown(ctx =>
     Information("Last Project Version = " + Versioning.ProjectVersion);
 });
 
+// Clean Folder all folder bin and object of the project
 Task("Clean")
     .Does(() => 
     {
@@ -63,6 +64,7 @@ Task("Clean")
         });
     });
 
+// Restore NuGet Package
 Task("RestoreNugetPackage")
     .IsDependentOn("Clean")
     .Does(() => 
@@ -70,6 +72,7 @@ Task("RestoreNugetPackage")
         NuGetRestore(CakeParameters.ProjectSolution);
     });
 
+// Build Project .sln
 Task("Build")
     .IsDependentOn("RestoreNugetPackage")
     .Does(() => 
@@ -86,6 +89,7 @@ Task("Build")
         }
     });
 
+// Run NUnit Test
 Task("RunNUnitTest")
     .IsDependentOn("Build")
     .Does(() =>
@@ -98,13 +102,15 @@ Task("RunNUnitTest")
         });
     });
 
+// Versioning of the Project
 Task("Version")
-    //.IsDependentOn("RunNUnitTest")
+    .IsDependentOn("RunNUnitTest")
     .Does(() => 
     {
         Versioning.temporaireSemver();
     });
 
+// CopyFiles in the Versioning Folder
 Task("CopyFiles")
     .IsDependentOn("Version")
     .Does(() => 
@@ -119,6 +125,7 @@ Task("CopyFiles")
         CopyFiles(new FilePath[] {"License", "README.md", "ReleaseNotes.md"}, CakeParameters.BuildResultDirectory + "bin");
     });
 
+// Create NuGet Package
 Task("CreateNugetPackage")
     .IsDependentOn("CopyFiles")
     .Does(() => 
@@ -163,6 +170,7 @@ Task("CreateNugetPackage")
         NuGetPack(nuGetPackSettings);
     });
 
+// 
 Task("OctoPush")
     .IsDependentOn("CreateNugetPackage")
     .Does( () =>
@@ -170,6 +178,7 @@ Task("OctoPush")
         // à implémenté
     });
 
+//
 Task("OctoRelease")
     .IsDependentOn("OctoPush")
     .Does(() => 
@@ -177,6 +186,7 @@ Task("OctoRelease")
         // à implémenté
     });
 
+// Read ReleaseNotes.md
 Task("ReleaseNotesReadText")
     .IsDependentOn("OctoRelease")
     .Does(() => 
@@ -192,6 +202,7 @@ Task("ReleaseNotesReadText")
         }
     });
 
+// Write in ReleaseNotes.md
 Task("ReleaseNotesWriteText")
     .IsDependentOn("ReleaseNotesReadText")
     .Does(() => 
@@ -206,6 +217,7 @@ Task("ReleaseNotesWriteText")
         System.IO.File.WriteAllLines("./ReleaseNotes.md", newFiles);
     });
 
+// Commit in GitHub
 Task("GitHubCommit")
     .IsDependentOn("ReleaseNotesWriteText")
     .Does(() =>
@@ -222,6 +234,7 @@ Task("GitHubCommit")
         Process.Start(GitCommand, GitCommit);
     });
 
+// Push in GitHub
 Task("GitHubPush")
     .IsDependentOn("GitHubCommit")
     .Does(() => 
@@ -232,6 +245,7 @@ Task("GitHubPush")
         Process.Start(GitCommand, GitPush);
     });
 
+// Tag in GitHub
 Task("GitHubTag")
     .IsDependentOn("GitHubPush")
     .Does(() =>

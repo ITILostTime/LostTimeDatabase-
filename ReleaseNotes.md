@@ -1,3 +1,7 @@
+### New in 0.1.2 (Released : 02/05/2017)
+ 
+Comment Code for the group
+ 
 ### New in 0.1.1 (Released : 02/05/2017)
  
 Patch Bug Git
