@@ -209,21 +209,44 @@ Task("GitHubCommit")
     .IsDependentOn("ReleaseNotesWriteText")
     .Does(() =>
     {
-        // à implémenté
+        Console.WriteLine("Write a note for your commit without space");
+        string CommitMessage = Console.ReadLine();
+        CommitMessage += "Version" + Versioning.ProjectVersion;
+
+        string GitCommand = "git";
+        string GitAddAll = @"add --all";
+        string GitCommit = @"commit -a -m" + " " + CommitMessage;
+
+        Process.Start(GitCommand, GitAddAll);
+        Process.Start(GitCommand, GitCommit);
     });
 
 Task("GitHubPush")
     .IsDependentOn("GitHubCommit")
     .Does(() => 
     {
-        // à implémenté
+        string GitCommand = "git";
+        string GitPush = @"push --all";
+
+        Process.Start(GitCommand, GitPush);
     });
 
 Task("GitHubTag")
     .IsDependentOn("GitHubPush")
     .Does(() =>
     {
-        // à implémenté
+        string GitCommand = "git";
+        string GitTag = @"tag -a" + " " + Versioning.ProjectVersion + " " + "-m" + " " + Versioning.ProjectVersion;
+
+        Process.Start(GitCommand, GitTag);
+
+        string GitPushTags = @"push --tags";
+
+        Process.Start(GitCommand, GitPushTags);
+
+        string GitPush = @"push --all";
+
+        Process.Start(GitCommand, GitPush);
     });
 
 
@@ -232,7 +255,7 @@ Task("GitHubTag")
 //////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("ReleaseNotesWriteText");
+    .IsDependentOn("GitHubTag");
 
 //////////////////////////////////////////////
 // Execution
