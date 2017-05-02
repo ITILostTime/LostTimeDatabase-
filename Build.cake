@@ -138,7 +138,7 @@ Task("CreateNugetPackage")
             Description = "Lost Time Database",
             Summary = "All script to use LostTime database",
             ProjectUrl = LostTimeInformation.ProjectUrl,
-            //LicenseUrl = LostTimeInformation.LicenseUrl,
+            LicenseUrl = LostTimeInformation.LicenseUrl,
             Copyright = "Lost Time",
             ReleaseNotes = releaseNotes.Notes.ToArray(),
             Tags = new[] 
@@ -180,14 +180,29 @@ Task("ReleaseNotesReadText")
     .IsDependentOn("OctoRelease")
     .Does(() => 
     {
-        // à implémenté
+        string[] lines = System.IO.File.ReadAllLines("./ReleaseNotes.md");
+
+        System.Console.WriteLine("Contents of WriteLines2.txt = ");
+
+        foreach (string line in lines)
+        {
+            // Use a tab to indent each line of the file.
+            Console.WriteLine("\t" + line);
+        }
     });
 
 Task("ReleaseNotesWriteText")
     .IsDependentOn("ReleaseNotesReadText")
     .Does(() => 
     {
-        // à implémenté
+        Console.WriteLine("Give a comment to your tasks for this build");
+        string comment = Console.ReadLine();
+
+        string[] lines = System.IO.File.ReadAllLines("./ReleaseNotes.md");
+        string[] text = {"### New in " + Versioning.ProjectVersion + " (Released : " + System.DateTime.Now.ToShortDateString() + ")", " ", comment , " "};
+        string[] newFiles = text.Concat(lines).ToArray();
+
+        System.IO.File.WriteAllLines("./ReleaseNotes.md", newFiles);
     });
 
 Task("GitHubCommit")
@@ -217,7 +232,7 @@ Task("GitHubTag")
 //////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("CreateNugetPackage");
+    .IsDependentOn("ReleaseNotesWriteText");
 
 //////////////////////////////////////////////
 // Execution
