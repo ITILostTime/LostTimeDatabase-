@@ -238,15 +238,11 @@ Task("GitHubTag")
     {
         string GitCommand = "git";
         string GitTag = @"tag -a" + " " + Versioning.ProjectVersion + " " + "-m" + " " + Versioning.ProjectVersion;
-
-        Process.Start(GitCommand, GitTag);
-
         string GitPushTags = @"push --tags";
-
-        Process.Start(GitCommand, GitPushTags);
-
         string GitPush = @"push --all";
 
+        Process.Start(GitCommand, GitTag);
+        Process.Start(GitCommand, GitPushTags);
         Process.Start(GitCommand, GitPush);
     });
 

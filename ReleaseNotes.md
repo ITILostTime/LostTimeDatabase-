@@ -1,3 +1,7 @@
+### New in 0.1.1 (Released : 02/05/2017)
+ 
+Patch Bug Git
+ 
 ### New in 0.1.0 (Released : 02/05/2017)
  
 Add Versioning to project by CI and Cake
