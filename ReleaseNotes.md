@@ -1,3 +1,7 @@
+### New in 0.2.1 (Released : 08/05/2017)
+ 
+2nd Try to be sure it works
+ 
 ### New in 0.2.0 (Released : 08/05/2017)
  
 Add LostTimeDB Script.cs and Script.SQL
