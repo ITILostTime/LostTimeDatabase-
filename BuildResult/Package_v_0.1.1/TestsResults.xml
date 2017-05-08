@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="1" engine-version="3.4.0.0" clr-version="4.0.30319.42000" start-time="2017-05-02 13:16:11Z" end-time="2017-05-02 13:16:11Z" duration="0.093787">
+  <command-line><![CDATA["C:/Users/GuillaumeElisabeth/Documents/Projects/LostTimeDB/tools/NUnit.ConsoleRunner/tools/nunit3-console.exe" "C:/Users/GuillaumeElisabeth/Documents/Projects/LostTimeDB/LostTimeDB/LostTimeDBTest/bin/Release/LostTimeDBTest.dll" "--result=C:/Users/GuillaumeElisabeth/Documents/Projects/LostTimeDB/BuildResult/Package_v_0.1.1//TestsResults.xml"]]></command-line>
+  <test-suite type="Assembly" id="0-1002" name="LostTimeDBTest.dll" fullname="C:\Users\GuillaumeElisabeth\Documents\Projects\LostTimeDB\LostTimeDB\LostTimeDBTest\bin\Release\LostTimeDBTest.dll" runstate="Runnable" testcasecount="1" result="Passed" start-time="2017-05-02 13:16:11Z" end-time="2017-05-02 13:16:11Z" duration="0.051165" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="1">
+    <environment framework-version="3.6.1.0" clr-version="4.0.30319.42000" os-version="Microsoft Windows NT 10.0.14393.0" platform="Win32NT" cwd="C:\Users\GuillaumeElisabeth\Documents\Projects\LostTimeDB" machine-name="DESKTOP-7MAAC8E" user="GuillaumeElisabeth" user-domain="DESKTOP-7MAAC8E" culture="fr-FR" uiculture="fr-FR" os-architecture="x64" />
+    <settings>
+      <setting name="WorkDirectory" value="C:\Users\GuillaumeElisabeth\Documents\Projects\LostTimeDB" />
+      <setting name="ImageRuntimeVersion" value="4.0.30319" />
+      <setting name="ImageTargetFrameworkName" value=".NETFramework,Version=v4.5.2" />
+      <setting name="ImageRequiresX86" value="False" />
+      <setting name="ImageRequiresDefaultAppDomainAssemblyResolver" value="False" />
+      <setting name="NumberOfTestWorkers" value="4" />
+    </settings>
+    <properties>
+      <property name="_PID" value="18900" />
+      <property name="_APPDOMAIN" value="test-domain-" />
+    </properties>
+    <test-suite type="TestSuite" id="0-1003" name="LostTimeDBTest" fullname="LostTimeDBTest" runstate="Runnable" testcasecount="1" result="Passed" start-time="2017-05-02 13:16:11Z" end-time="2017-05-02 13:16:11Z" duration="0.027063" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="1">
+      <test-suite type="TestFixture" id="0-1000" name="DatabaseConnectionTest" fullname="LostTimeDBTest.DatabaseConnectionTest" classname="LostTimeDBTest.DatabaseConnectionTest" runstate="Runnable" testcasecount="1" result="Passed" start-time="2017-05-02 13:16:11Z" end-time="2017-05-02 13:16:11Z" duration="0.022270" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="1">
+        <test-case id="0-1001" name="TestCakeBuild" fullname="LostTimeDBTest.DatabaseConnectionTest.TestCakeBuild" methodname="TestCakeBuild" classname="LostTimeDBTest.DatabaseConnectionTest" runstate="Runnable" seed="1445104986" result="Passed" start-time="2017-05-02 13:16:11Z" end-time="2017-05-02 13:16:11Z" duration="0.008481" asserts="1" />
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
