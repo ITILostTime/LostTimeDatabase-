@@ -10,6 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LostTimeDBTest", "LostTimeD
 		{175226AE-2AB5-4E44-A885-B26A2D1060F0} = {175226AE-2AB5-4E44-A885-B26A2D1060F0}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LostTimeDbUp", "LostTimeDbUp\LostTimeDbUp.csproj", "{FAAD2365-BC22-42F9-A10F-764F9A7F55BF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{175226AE-2AB5-4E44-A885-B26A2D1060F0} = {175226AE-2AB5-4E44-A885-B26A2D1060F0}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +29,10 @@ Global
 		{60C4F263-01B6-4B53-834A-386D4FD50E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60C4F263-01B6-4B53-834A-386D4FD50E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60C4F263-01B6-4B53-834A-386D4FD50E73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAAD2365-BC22-42F9-A10F-764F9A7F55BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAAD2365-BC22-42F9-A10F-764F9A7F55BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAAD2365-BC22-42F9-A10F-764F9A7F55BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAAD2365-BC22-42F9-A10F-764F9A7F55BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
