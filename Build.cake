@@ -1,0 +1,275 @@
+#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
+#tool nuget:?package=GitVersion.CommandLine
+
+using System;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.IO;
+
+//////////////////////////////////////////////
+// Load / Add Script
+//////////////////////////////////////////////
+
+#load "./CakeFolder/CakeParameters.cake"
+#load "./CakeFolder/LostTimeInformation.cake"
+
+//////////////////////////////////////////////
+// Argument
+//////////////////////////////////////////////
+
+// Target to launch the build
+var target = Argument("target", "Default");
+
+// Folder To Clean
+public var CleanFolder = Argument("bin", "obj");
+
+//  Argument pour parcourir les dossiers du projet
+var configuration = Argument("configuration", "Release");
+
+//  Fichier ReleaseNotes
+public var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
+
+//  Dernière version du projet
+public string version = releaseNotes.Version.ToString();
+
+//////////////////////////////////////////////
+// Task
+//////////////////////////////////////////////
+
+// Execute before first Task
+Setup(ctx => 
+{
+    Information("Started Build Project");
+    Information(version);
+
+    Versioning.ProjectVersion = version;
+});
+
+// Execute after last Task
+Teardown(ctx => 
+{
+    Information("Finished Build Project");
+    Information("Last Project Version = " + Versioning.ProjectVersion);
+});
+
+// Clean Folder all folder bin and object of the project
+Task("Clean")
+    .Does(() => 
+    {
+        CleanDirectories(new DirectoryPath[]
+        {
+            CakeParameters.BuildResultDirectory,
+            Directory(CakeParameters.LostTimeDB + CleanFolder),
+            Directory(CakeParameters.LostTimeDBTest + CleanFolder),
+        });
+    });
+
+// Restore NuGet Package
+Task("RestoreNugetPackage")
+    .IsDependentOn("Clean")
+    .Does(() => 
+    {
+        NuGetRestore(CakeParameters.ProjectSolution);
+    });
+
+// Build Project .sln
+Task("Build")
+    .IsDependentOn("RestoreNugetPackage")
+    .Does(() => 
+    {
+        if(IsRunningOnWindows())
+        {
+        MSBuild(CakeParameters.ProjectSolution, settings =>
+            settings.SetConfiguration(configuration));
+        }
+        else
+        {
+        XBuild(CakeParameters.ProjectSolution, settings =>
+            settings.SetConfiguration(configuration));
+        }
+    });
+
+// Run NUnit Test
+Task("RunNUnitTest")
+    .IsDependentOn("Build")
+    .Does(() =>
+    {
+        var testsFile = CakeParameters.ProjectApplicationTestDLL + configuration + "/*Test.dll";
+
+        NUnit3(testsFile, new NUnit3Settings {
+        Results = CakeParameters.ProjectApplicationResultBuild,
+        NoResults = false,
+        });
+    });
+
+// Versioning of the Project
+Task("Version")
+    .IsDependentOn("RunNUnitTest")
+    .Does(() => 
+    {
+        Versioning.temporaireSemver();
+    });
+
+// CopyFiles in the Versioning Folder
+Task("CopyFiles")
+    .IsDependentOn("Version")
+    .Does(() => 
+    {
+        EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin");
+
+        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin");
+        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.pdb", CakeParameters.BuildResultDirectory + "bin");
+        CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.dll", CakeParameters.BuildResultDirectory + "bin");
+        CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.pdb", CakeParameters.BuildResultDirectory + "bin");
+
+        CopyFiles(new FilePath[] {"License", "README.md", "ReleaseNotes.md"}, CakeParameters.BuildResultDirectory + "bin");
+    });
+
+// Create NuGet Package
+Task("CreateNugetPackage")
+    .IsDependentOn("CopyFiles")
+    .Does(() => 
+    {
+        var nuGetPackSettings = new NuGetPackSettings
+        {
+            Id = "LostTimeDB",
+            Version = Versioning.ProjectVersion,
+            Title = "LostTimeDB",
+            Authors = new[] 
+            {
+                "Guillaume Elisabeth"
+            },
+            Owners = new[] 
+            {
+                "LostTime"
+            },
+            Description = "Lost Time Database",
+            Summary = "All script to use LostTime database",
+            ProjectUrl = LostTimeInformation.ProjectUrl,
+            LicenseUrl = LostTimeInformation.LicenseUrl,
+            Copyright = "Lost Time",
+            ReleaseNotes = releaseNotes.Notes.ToArray(),
+            Tags = new[] 
+            {
+                "Cake", "Script", "Build"
+            },
+            RequireLicenseAcceptance = false,
+            Symbols = false,
+            NoPackageAnalysis = true,
+            Files = new[] 
+            {
+                new NuSpecContent 
+                {
+                    Source = "LostTimeDB.dll", Target = "bin"
+                },
+            },
+            BasePath = CakeParameters.BuildResultDirectory + "bin",
+            OutputDirectory = CakeParameters.BuildResultDirectory,
+        };
+
+        NuGetPack(nuGetPackSettings);
+    });
+
+// 
+Task("OctoPush")
+    .IsDependentOn("CreateNugetPackage")
+    .Does( () =>
+    {
+        // à implémenté
+    });
+
+//
+Task("OctoRelease")
+    .IsDependentOn("OctoPush")
+    .Does(() => 
+    {
+        // à implémenté
+    });
+
+// Read ReleaseNotes.md
+Task("ReleaseNotesReadText")
+    .IsDependentOn("OctoRelease")
+    .Does(() => 
+    {
+        string[] lines = System.IO.File.ReadAllLines("./ReleaseNotes.md");
+
+        System.Console.WriteLine("Contents of WriteLines2.txt = ");
+
+        foreach (string line in lines)
+        {
+            // Use a tab to indent each line of the file.
+            Console.WriteLine("\t" + line);
+        }
+    });
+
+// Write in ReleaseNotes.md
+Task("ReleaseNotesWriteText")
+    .IsDependentOn("ReleaseNotesReadText")
+    .Does(() => 
+    {
+        Console.WriteLine("Give a comment to your tasks for this build");
+        string comment = Console.ReadLine();
+
+        string[] lines = System.IO.File.ReadAllLines("./ReleaseNotes.md");
+        string[] text = {"### New in " + Versioning.ProjectVersion + " (Released : " + System.DateTime.Now.ToShortDateString() + ")", " ", comment , " "};
+        string[] newFiles = text.Concat(lines).ToArray();
+
+        System.IO.File.WriteAllLines("./ReleaseNotes.md", newFiles);
+    });
+
+// Commit in GitHub
+Task("GitHubCommit")
+    .IsDependentOn("ReleaseNotesWriteText")
+    .Does(() =>
+    {
+        Console.WriteLine("Write a note for your commit without space");
+        string CommitMessage = Console.ReadLine();
+        CommitMessage += "Version" + Versioning.ProjectVersion;
+
+        string GitCommand = "git";
+        string GitAddAll = @"add --all";
+        string GitCommit = @"commit -a -m" + " " + CommitMessage;
+
+        Process.Start(GitCommand, GitAddAll);
+        Process.Start(GitCommand, GitCommit);
+    });
+
+// Push in GitHub
+Task("GitHubPush")
+    .IsDependentOn("GitHubCommit")
+    .Does(() => 
+    {
+        string GitCommand = "git";
+        string GitPush = @"push --all";
+
+        Process.Start(GitCommand, GitPush);
+    });
+
+// Tag in GitHub
+Task("GitHubTag")
+    .IsDependentOn("GitHubPush")
+    .Does(() =>
+    {
+        string GitCommand = "git";
+        string GitTag = @"tag -a" + " " + Versioning.ProjectVersion + " " + "-m" + " " + Versioning.ProjectVersion;
+        string GitPushTags = @"push --tags";
+        string GitPush = @"push --all";
+
+        Process.Start(GitCommand, GitTag);
+        Process.Start(GitCommand, GitPushTags);
+        Process.Start(GitCommand, GitPush);
+    });
+
+
+//////////////////////////////////////////////
+// Task Target
+//////////////////////////////////////////////
+
+Task("Default")
+    .IsDependentOn("GitHubTag");
+
+//////////////////////////////////////////////
+// Execution
+//////////////////////////////////////////////
+
+RunTarget(target);
