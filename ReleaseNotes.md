@@ -1,3 +1,7 @@
+### New in 0.2.0 (Released : 08/05/2017)
+ 
+Add LostTimeDB Script.cs and Script.SQL
+ 
 ### New in 0.1.2 (Released : 02/05/2017)
  
 Comment Code for the group

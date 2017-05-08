@@ -7,7 +7,4 @@ CREATE TABLE UserAccount
 	UserLastname NVARCHAR(32) NOT NULL,
 	UserEmail NVARCHAR(64) NOT NULL,
 	UserPassword NVARCHAR(32) NOT NULL
-
-	CONSTRAINT UniqueNvarchar_UserID UNIQUE(UserID),
-	CONSTRAINT UniqueNvarchar_UserEmail UNIQUE(UserEmail),
 );

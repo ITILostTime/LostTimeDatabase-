@@ -45,7 +45,7 @@ namespace LostTimeDbUp
             Console.WriteLine("Success!");
             Console.ResetColor();
 
-            CreateUserID(connectionString);
+            //CreateUserID(connectionString);
 
             return 0;
         }
@@ -95,6 +95,8 @@ namespace LostTimeDbUp
 
                 //user.DeleteUserAccount("julie");
 
+                //user.UpdateUserAccount(userAccount.UserID, "aa", "aa", "aa", "aa");
+;
             }
             else
             {
