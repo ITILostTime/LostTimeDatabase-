@@ -164,37 +164,9 @@ Task("CreateNugetPackage")
         NuGetPack(nuGetPackSettings);
     });
 
-// 
-Task("PublishMyGet")
-    .IsDependentOn("CreateNugetPackage")
-    .Does( () =>
-    {
-        //      Resolve the API Key
-        var apiKey = LostTimeInformation.MyGet_API_Key;
-        if(string.IsNullOrEmpty(apiKey))
-        {
-            throw new InvalidOperationException("Could not resolve MyGet API Key");
-        }
-
-        //      Resolve the API Url
-        var apiUrl = LostTimeInformation.MyGet_API_URL;
-        if(string.IsNullOrEmpty(apiUrl))
-        {
-            throw new InvalidOperationException("Could not reseolve MyGet API Url");
-        }
-
-        //      Push the package
-        NuGetPush(CakeParameters.NugetPath, new NuGetPushSettings {
-            Source = apiUrl,
-            ApiKey = apiKey
-        });
-        
-    });
-
-
 // Read ReleaseNotes.md
 Task("ReleaseNotesReadText")
-    .IsDependentOn("PublishMyGet")
+    .IsDependentOn("CreateNugetPackage")
     .Does(() => 
     {
         string[] lines = System.IO.File.ReadAllLines("./ReleaseNotes.md");
@@ -221,6 +193,33 @@ Task("ReleaseNotesWriteText")
         string[] newFiles = text.Concat(lines).ToArray();
 
         System.IO.File.WriteAllLines("./ReleaseNotes.md", newFiles);
+    });
+
+//  Publish LostTimeDB.nupgk on MyGet
+Task("PublishMyGet")
+    .IsDependentOn("ReleaseNotesWriteText")
+    .Does( () =>
+    {
+        //      Resolve the API Key
+        var apiKey = LostTimeInformation.MyGet_API_Key;
+        if(string.IsNullOrEmpty(apiKey))
+        {
+            throw new InvalidOperationException("Could not resolve MyGet API Key");
+        }
+
+        //      Resolve the API Url
+        var apiUrl = LostTimeInformation.MyGet_API_URL;
+        if(string.IsNullOrEmpty(apiUrl))
+        {
+            throw new InvalidOperationException("Could not reseolve MyGet API Url");
+        }
+
+        //      Push the package
+        NuGetPush(CakeParameters.NugetPath, new NuGetPushSettings {
+            Source = apiUrl,
+            ApiKey = apiKey
+        });
+        
     });
 
 // Commit in GitHub

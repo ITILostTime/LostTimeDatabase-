@@ -1,3 +1,7 @@
+### New in 0.3.1 (Released : 21/05/2017)
+ 
+Fix few posting bugs
+ 
 ### New in 0.3.0 (Released : 21/05/2017)
  
 Add LostTimeDB Packages To MyGet
