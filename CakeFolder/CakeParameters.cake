@@ -18,4 +18,7 @@ public class CakeParameters
 
     //  Dossier contenant les résultats du build
     public static string ProjectApplicationResultBuild = BuildResultDirectory + "/TestsResults.xml";
+
+    //  Path to last Package NuGet
+    public static string NugetPath = BuildResultDirectory + "LostTimeDB." + Versioning.ProjectVersion + ".nupkg";
 }

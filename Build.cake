@@ -43,6 +43,8 @@ Setup(ctx =>
     Information(version);
 
     Versioning.ProjectVersion = version;
+
+    Versioning.temporaireSemver();
 });
 
 // Execute after last Task
@@ -102,17 +104,9 @@ Task("RunNUnitTest")
         });
     });
 
-// Versioning of the Project
-Task("Version")
-    .IsDependentOn("RunNUnitTest")
-    .Does(() => 
-    {
-        Versioning.temporaireSemver();
-    });
-
 // CopyFiles in the Versioning Folder
 Task("CopyFiles")
-    .IsDependentOn("Version")
+    .IsDependentOn("RunNUnitTest")
     .Does(() => 
     {
         EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin");
@@ -171,24 +165,36 @@ Task("CreateNugetPackage")
     });
 
 // 
-Task("OctoPush")
+Task("PublishMyGet")
     .IsDependentOn("CreateNugetPackage")
     .Does( () =>
     {
-        // à implémenté
+        //      Resolve the API Key
+        var apiKey = LostTimeInformation.MyGet_API_Key;
+        if(string.IsNullOrEmpty(apiKey))
+        {
+            throw new InvalidOperationException("Could not resolve MyGet API Key");
+        }
+
+        //      Resolve the API Url
+        var apiUrl = LostTimeInformation.MyGet_API_URL;
+        if(string.IsNullOrEmpty(apiUrl))
+        {
+            throw new InvalidOperationException("Could not reseolve MyGet API Url");
+        }
+
+        //      Push the package
+        NuGetPush(CakeParameters.NugetPath, new NuGetPushSettings {
+            Source = apiUrl,
+            ApiKey = apiKey
+        });
+        
     });
 
-//
-Task("OctoRelease")
-    .IsDependentOn("OctoPush")
-    .Does(() => 
-    {
-        // à implémenté
-    });
 
 // Read ReleaseNotes.md
 Task("ReleaseNotesReadText")
-    .IsDependentOn("OctoRelease")
+    .IsDependentOn("PublishMyGet")
     .Does(() => 
     {
         string[] lines = System.IO.File.ReadAllLines("./ReleaseNotes.md");

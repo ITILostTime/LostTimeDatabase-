@@ -1,3 +1,7 @@
+### New in 0.3.0 (Released : 21/05/2017)
+ 
+Add LostTimeDB Packages To MyGet
+ 
 ### New in 0.2.2 (Released : 10/05/2017)
  
 itération 01
