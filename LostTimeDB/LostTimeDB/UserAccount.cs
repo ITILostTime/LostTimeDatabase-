@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LostTimeDB
 {
@@ -19,5 +15,9 @@ namespace LostTimeDB
         public DateTime UserAccountCreationDate { get; set; }
 
         public DateTime UserLastConnectionDate { get; set; }
+
+        public string UserGoogleToken { get; set; }
+
+        public int UserGoogleID { get; set; }
     }
 }

@@ -90,7 +90,7 @@
     <EmbeddedResource Include="Scripts\Process\UserAccount\170508115309_CreateProcessCreateNewUserAccount.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\Views\UserAccount\170508115424_CreateViewTableUserAccountGetByPseudonym.sql" />
+    <EmbeddedResource Include="Scripts\Views\UserAccount\170508115424_CreateViewTableUserAccountFindByPseudonym.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LostTimeDB\LostTimeDB.csproj">
@@ -105,7 +105,16 @@
     <EmbeddedResource Include="Scripts\Process\UserAccount\170508144219_CreateProcessUpdateUserAccount.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\Views\UserAccount\170523160426_CreateViewTableUserAccountGetByID.sql" />
+    <EmbeddedResource Include="Scripts\Views\UserAccount\170523160426_CreateViewTableUserAccountFindByID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\Views\UserAccount\170523211955_CreateViewTableUserAccountFindByGoogleID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\Process\UserAccount\170523214331_CreateProcessCreateNewUserAccountWithGoogleInformation.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\Process\UserAccount\170523220723_CreateProcessDeleteUserAccountByGoogleID.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

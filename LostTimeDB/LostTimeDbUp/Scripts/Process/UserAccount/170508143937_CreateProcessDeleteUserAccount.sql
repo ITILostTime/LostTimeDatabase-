@@ -1,6 +1,6 @@
 /* Migration Script */
 
-CREATE PROCEDURE DeleteUserAccount
+CREATE PROCEDURE DeleteUserAccountByName
 (
 	@UserPseudonym NVARCHAR(64)
 )

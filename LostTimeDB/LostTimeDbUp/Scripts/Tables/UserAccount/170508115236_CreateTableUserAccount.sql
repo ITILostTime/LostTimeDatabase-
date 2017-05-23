@@ -9,9 +9,10 @@ CREATE TABLE UserAccount
 	UserAccountCreationDate DATETIME2 NOT NULL,
 	UserLastConnectionDate DATETIME2,
 	UserGoogleToken NVARCHAR(64),
-	UserGoogleID NVARCHAR(64),
+	UserGoogleID Int,
 		
 	/*
-	UserGroupID,
+	UserGroupID int,
+	ActiveQuest json
 	*/
 );
