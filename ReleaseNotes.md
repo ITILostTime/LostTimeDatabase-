@@ -1,3 +1,7 @@
+### New in 0.4.0 (Released : 23/05/2017)
+ 
+Add new fct to SQLDB
+ 
 ### New in 0.3.1 (Released : 21/05/2017)
  
 Fix few posting bugs

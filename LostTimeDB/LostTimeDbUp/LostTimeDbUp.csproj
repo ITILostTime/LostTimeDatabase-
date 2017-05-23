@@ -84,13 +84,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\170508115236_CreateTableUserAccount.sql" />
+    <EmbeddedResource Include="Scripts\Tables\UserAccount\170508115236_CreateTableUserAccount.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\170508115309_CreateProcessCreateNewUserAccount.sql" />
+    <EmbeddedResource Include="Scripts\Process\UserAccount\170508115309_CreateProcessCreateNewUserAccount.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\170508115424_CreateViewTableUserAccount.sql" />
+    <EmbeddedResource Include="Scripts\Views\UserAccount\170508115424_CreateViewTableUserAccountGetByPseudonym.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LostTimeDB\LostTimeDB.csproj">
@@ -99,10 +99,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\170508143937_CreateProcessDeleteUserAccount.sql" />
+    <EmbeddedResource Include="Scripts\Process\UserAccount\170508143937_CreateProcessDeleteUserAccount.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\170508144219_CreateProcessUpdateUserAccount.sql" />
+    <EmbeddedResource Include="Scripts\Process\UserAccount\170508144219_CreateProcessUpdateUserAccount.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\Views\UserAccount\170523160426_CreateViewTableUserAccountGetByID.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

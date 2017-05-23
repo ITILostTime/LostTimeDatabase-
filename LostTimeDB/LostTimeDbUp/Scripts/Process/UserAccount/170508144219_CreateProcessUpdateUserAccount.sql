@@ -2,18 +2,16 @@
 
 CREATE PROCEDURE UpdateUserAccount
 (
-	@UserID NVARCHAR(32),
-	@UserFirstname NVARCHAR(32),
-	@UserLastname NVARCHAR(32),
+	@UserID INT,
+	@UserPseudonym NVARCHAR(64),
 	@UserEmail NVARCHAR(64),
-	@UserPassword NVARCHAR(32)
+	@UserPassword NVARCHAR(64)
 )
 AS
 BEGIN
 	UPDATE UserAccount
-	SET 
-		UserFirstname = @UserFirstname,
-		UserLastname = @UserLastname,
+	SET
+		UserPseudonym = @UserPseudonym,
 		UserEmail = @UserEmail,
 		UserPassword = @UserPassword
 	WHERE UserID = @UserID

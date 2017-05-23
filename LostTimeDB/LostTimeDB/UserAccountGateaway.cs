@@ -18,24 +18,43 @@ namespace LostTimeDB
             _connectionString = connectionString;
         }
 
-        public UserAccount FindByName(string userFirstname, string userLastname)
+        public UserAccount FindByName(string userPseudonym)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 return connection.Query<UserAccount>(
                     @"select    s.UserID,
-                                s.UserFirstname,
-                                s.UserLastname,
+                                s.UserPseudonym,
                                 s.UserEmail,
-                                s.UserPassword
-                    from ViewUserAccount s
-                    where s.userFirstName = @UserFirstname and s.userLastname = @UserLastname;",
-                    new { UserFirstname = userFirstname, UserLastname = userLastname })
+                                s.UserPassword,
+                                s.UserAccountCreationDate,
+                                s.UserLastConnectionDate
+                    from ViewUserAccountGetByPseudonym s
+                    where s.UserPseudonym = @UserPseudonym ;",
+                    new { UserPseudonym = userPseudonym })
                     .FirstOrDefault();
             }
         }
 
-        public void CreateNewUserAccount(string userID, string userFirstname, string userLastname, string userEmail, string userPassword)
+        public UserAccount FindByID(int userID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                return connection.Query<UserAccount>(
+                    @"select    s.UserID,
+                                s.UserPseudonym,
+                                s.UserEmail,
+                                s.UserPassword,
+                                s.UserAccountCreationDate,
+                                s.UserLastConnectionDate
+                    from ViewUserAccountGetByID s
+                    where s.UserID = @UserID ;",
+                    new { UserID = userID })
+                    .FirstOrDefault();
+            }
+        }
+
+        public void CreateNewUserAccount(string userPseudonym, string userEmail, string userPassword, DateTime date)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -43,17 +62,16 @@ namespace LostTimeDB
                     "CreateNewUserAccount",
                     new
                     {
-                        UserID = userID,
-                        UserFirstname = userFirstname,
-                        UserLastname = userLastname,
+                        UserPseudonym = userPseudonym,
                         UserEmail = userEmail,
-                        UserPassword = userPassword
+                        UserPassword = userPassword,
+                        UserAccountCreationDate = date,
                     },
                     commandType: CommandType.StoredProcedure);
             }
         }
 
-        public void DeleteUserAccount(string userID)
+        public void DeleteUserAccount(string userPseudonym)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -61,13 +79,13 @@ namespace LostTimeDB
                     "DeleteUserAccount",
                     new
                     {
-                        UserID = userID
+                        UserPseudonym = userPseudonym
                     },
                     commandType: CommandType.StoredProcedure);
             }
         }
 
-        public void UpdateUserAccount(string userID, string userFirstname, string userLastname, string userEmail, string userPassword)
+        public void UpdateUserAccount(int userID, string userPseudonym, string userEmail, string userPassword)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -76,8 +94,7 @@ namespace LostTimeDB
                     new
                     {
                         UserID = userID,
-                        UserFirstname = userFirstname,
-                        UserLastname = userLastname,
+                        UserPseudonym = userPseudonym,
                         UserEmail = userEmail,
                         UserPassword = userPassword
                     },

@@ -45,68 +45,7 @@ namespace LostTimeDbUp
             Console.WriteLine("Success!");
             Console.ResetColor();
 
-            //CreateUserID(connectionString);
-
             return 0;
-        }
-
-        public static int CreateUserID(string connectionstring)
-        {
-            string userID;
-            string userFirstname;
-            string userLastname;
-            string userEmail;
-            string userPassword01;
-            string userPassword02;
-
-            Console.WriteLine("Identifiant");
-            userID = Console.ReadLine();
-
-            Console.WriteLine("Firstname");
-            userFirstname = Console.ReadLine();
-
-            Console.WriteLine("Lastname");
-            userLastname = Console.ReadLine();
-
-            Console.WriteLine("Email");
-            userEmail = Console.ReadLine();
-
-            Console.WriteLine("Password01");
-            userPassword01 = Console.ReadLine();
-
-            Console.WriteLine("Password02");
-            userPassword02 = Console.ReadLine();
-            
-            LostTimeDB.UserAccountGateaway user = new LostTimeDB.UserAccountGateaway(connectionstring);
-
-            if (userPassword01 == userPassword02)
-            {
-                LostTimeDB.UserAccount userAccount = new LostTimeDB.UserAccount();
-
-                user.CreateNewUserAccount(userID, userFirstname, userLastname, userEmail, userPassword01);
-
-                userAccount = user.FindByName(userFirstname, userLastname);
-                
-                Console.WriteLine(userAccount.UserID);
-                Console.WriteLine(userAccount.UserFirstname);
-                Console.WriteLine(userAccount.UserLastname);
-                Console.WriteLine(userAccount.UserEmail);
-                Console.WriteLine(userAccount.UserPassword);
-
-                //user.DeleteUserAccount("julie");
-
-                //user.UpdateUserAccount(userAccount.UserID, "aa", "aa", "aa", "aa");
-;
-            }
-            else
-            {
-                Console.WriteLine("Vos mots de passe sont différents");
-            }
-
-            Console.ReadLine();
-
-            return 0;
-
         }
     }
 }

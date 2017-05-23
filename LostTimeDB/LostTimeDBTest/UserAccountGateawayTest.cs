@@ -13,64 +13,86 @@ namespace LostTimeDBTest
         readonly Random _random;
         readonly string _connectionstring = "Server=(local)\\SqlExpress; Database=LostTimeDB; Trusted_connection=true";
 
+
+
+
         public UserAccountGateawayTest()
         {
             _random = new Random();
         }
 
         [Test]
-        public void can_create_find_update_and_delete_student()
+        public void Create_Update_Delete_UserAccount()
         {
             LostTimeDB.UserAccountGateaway userAccountGateaway = new LostTimeDB.UserAccountGateaway(_connectionstring);
+            LostTimeDB.UserAccount userAccount;
+            LostTimeDB.UserAccount userAccount2;
 
-            // Information NewAccountTest
-            string testUserID = "TestUserID";
-            string testUserFirstname = "TestUserFirstname";
-            string testUserLastname = "TestUserLastname";
+            string testUserPseudonym = "TestUserPseudonym";
             string testUserEmail = "TestUserEmail";
             string testUserPassword = "TestUserPassword";
 
-            LostTimeDB.UserAccount userAccount;
 
-            // Create UserAccount
+            string TestUserUpdatePseudonym = "TestUserUpdatePseudonym";
+            string TestUserUpdateEmail = "TestUserUpdateEmail";
+            string TestUserUpdatePassword = "TestUserUpdatePassword";
+
+
+            //      Creation UserAccount
             {
-                userAccountGateaway.CreateNewUserAccount(testUserID, testUserFirstname, testUserLastname, testUserEmail, testUserPassword);
+                userAccountGateaway.CreateNewUserAccount(testUserPseudonym, testUserEmail, testUserPassword, DateTime.Now);
             }
 
-            // Find UserAccount by firstname and lastname
+            //     Find User By Name
             {
-                userAccount = userAccountGateaway.FindByName(testUserFirstname, testUserLastname);
-                CheckUserAccount(userAccount, testUserID, testUserFirstname, testUserLastname, testUserEmail, testUserPassword);
+                userAccount = userAccountGateaway.FindByName(testUserPseudonym);
+                CheckUserAccount(userAccount, userAccount.UserID, testUserPseudonym, testUserEmail, testUserPassword, userAccount.UserAccountCreationDate);
             }
 
-            // Update UserAccount
+            //      Update UserAccount
             {
-                testUserFirstname = "TestUserUpdateFirstname";
-                testUserLastname = "TestUserUpdateLastName";
-                testUserEmail = "TestUserUpdateEmail";
-                testUserPassword = "TestUserUpdateEmail";
 
-                userAccountGateaway.UpdateUserAccount(userAccount.UserID, testUserFirstname, testUserLastname, testUserEmail, testUserPassword);
+                userAccountGateaway.UpdateUserAccount(userAccount.UserID, TestUserUpdatePseudonym, TestUserUpdateEmail, TestUserUpdatePassword);
+                userAccount2 = userAccountGateaway.FindByName(TestUserUpdatePseudonym);
+                CheckUserAccount(userAccount2, userAccount2.UserID, TestUserUpdatePseudonym, TestUserUpdateEmail, TestUserUpdatePassword, userAccount2.UserAccountCreationDate);
 
-                userAccount = userAccountGateaway.FindByName(testUserFirstname, testUserLastname);
-                CheckUserAccount(userAccount, userAccount.UserID, userAccount.UserFirstname, userAccount.UserLastname, userAccount.UserEmail, userAccount.UserPassword);
             }
 
-            // Delete UserAccount
+            //      Delete UserAcount
             {
-                userAccountGateaway.DeleteUserAccount(testUserID);
-                userAccount = userAccountGateaway.FindByName(testUserFirstname, testUserLastname);
+                userAccountGateaway.DeleteUserAccount(TestUserUpdatePseudonym);
+                userAccount = userAccountGateaway.FindByName(TestUserUpdatePseudonym);
                 Assert.That(userAccount, Is.Null);
             }
+            
         }
 
-        void CheckUserAccount(LostTimeDB.UserAccount userAccount, string userID, string userFirstname, string userLastname, string userEmail, string userPassword)
+        [Test]
+        public void FindByIDTest()
+        {
+            LostTimeDB.UserAccountGateaway userAccountGateaway = new LostTimeDB.UserAccountGateaway(_connectionstring);
+            LostTimeDB.UserAccount userAccount;
+            LostTimeDB.UserAccount userAccount2;
+
+            string testUserPseudonym = "TestFindByIDPseudonym";
+            string testUserEmail = "TestFindByIDEmail";
+            string testUserPassword = "TestFindByIDPassword";
+
+            userAccountGateaway.CreateNewUserAccount(testUserPseudonym, testUserEmail, testUserPassword, DateTime.Now);
+
+            userAccount = userAccountGateaway.FindByName(testUserPseudonym);
+            userAccount2 = userAccountGateaway.FindByID(userAccount.UserID);
+            Assert.That(userAccount.UserID, Is.EqualTo(userAccount2.UserID));
+
+        }
+
+        void CheckUserAccount(LostTimeDB.UserAccount userAccount, int userID, string userPseudonym, string userEmail, string userPassword, DateTime creationDate)
         {
             Assert.That(userAccount.UserID, Is.EqualTo(userID));
-            Assert.That(userAccount.UserFirstname, Is.EqualTo(userFirstname));
-            Assert.That(userAccount.UserLastname, Is.EqualTo(userLastname));
+            Assert.That(userAccount.UserPseudonym, Is.EqualTo(userPseudonym));
             Assert.That(userAccount.UserEmail, Is.EqualTo(userEmail));
             Assert.That(userAccount.UserPassword, Is.EqualTo(userPassword));
+            Assert.That(userAccount.UserAccountCreationDate, Is.EqualTo(creationDate));
         }
     }
 }
