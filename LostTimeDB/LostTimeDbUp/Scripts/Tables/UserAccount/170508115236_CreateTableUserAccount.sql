@@ -12,5 +12,4 @@ CREATE TABLE UserAccount
 	UserGoogleToken NVARCHAR(64),
 
 	CONSTRAINT FK_UserGoogleID FOREIGN KEY (UserGoogleID) REFERENCES UserGoogleIDToken (UserGoogleID),
-	CONSTRAINT FK_UserGoogleToken FOREIGN KEY (UserGoogleToken) REFERENCES UserGoogleIDToken (UserGoogleToken),
 );

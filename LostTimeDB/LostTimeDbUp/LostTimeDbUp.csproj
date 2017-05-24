@@ -108,10 +108,10 @@
     <EmbeddedResource Include="Scripts\Views\UserAccount\170523160426_CreateViewTableUserAccountFindByID.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\Process\UserAccount\170524092732_CreateProcessAddGoogleIDGoogleToken.sql" />
+    <EmbeddedResource Include="Scripts\Process\UserAccount\170524110702_CreateProcessDeleteUserAccountByUserID.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\Process\UserAccount\170524110702_CreateProcessDeleteUserAccountByUserID.sql" />
+    <EmbeddedResource Include="Scripts\Tables\GoogleAccount\170524153619_CreateTableGoogleAccount.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -13,7 +13,7 @@ namespace LostTimeDBTest
         [Test]
         public void TestCakeBuild()
         {
-            LostTimeDB.DatabaseConnection cakeBuild = new LostTimeDB.DatabaseConnection();
+            LostTimeDB.GoogleAccount cakeBuild = new LostTimeDB.GoogleAccount();
             Assert.That(cakeBuild.BuildCake("Cake Build OK").Equals("Cake Build OK"));
         }
     }

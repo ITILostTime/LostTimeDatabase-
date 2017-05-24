@@ -119,7 +119,7 @@ Task("CopyFiles")
         CopyFiles(new FilePath[] {"License", "README.md", "ReleaseNotes.md"}, CakeParameters.BuildResultDirectory + "bin");
     });
 
-// Create NuGet Package
+// Create NuGet Package SQL.DLL
 Task("CreateNugetPackage")
     .IsDependentOn("CopyFiles")
     .Does(() => 
@@ -164,9 +164,54 @@ Task("CreateNugetPackage")
         NuGetPack(nuGetPackSettings);
     });
 
+// Create NuGet Package DbUp
+Task("CreateNugetDbUpPackage")
+    .IsDependentOn("CreateNugetPackage")
+    .Does(() => 
+    {
+        var nuGetPackSettings = new NuGetPackSettings
+        {
+            Id = "LostTimeDbUp",
+            Version = Versioning.ProjectVersion,
+            Title = "LostTimeDbUp",
+            Authors = new[] 
+            {
+                "Guillaume Elisabeth"
+            },
+            Owners = new[] 
+            {
+                "LostTime"
+            },
+            Description = "Lost Time Database",
+            Summary = "All script to use LostTime database",
+            ProjectUrl = LostTimeInformation.ProjectUrl,
+            LicenseUrl = LostTimeInformation.LicenseUrl,
+            Copyright = "Lost Time",
+            ReleaseNotes = releaseNotes.Notes.ToArray(),
+            Tags = new[] 
+            {
+                "Cake", "Script", "Build"
+            },
+            RequireLicenseAcceptance = false,
+            Symbols = false,
+            NoPackageAnalysis = true,
+            Files = new[] 
+            {
+                new NuSpecContent 
+                {
+                    Source = "LostTimeDB.dll", Target = "bin"
+                },
+            },
+            BasePath = CakeParameters.BuildResultDirectory + "bin",
+            OutputDirectory = CakeParameters.BuildResultDirectory,
+        };
+
+        NuGetPack(nuGetPackSettings);
+    });
+
 // Read ReleaseNotes.md
 Task("ReleaseNotesReadText")
-    .IsDependentOn("CreateNugetPackage")
+    .IsDependentOn("CreateNugetDbUpPackage")
     .Does(() => 
     {
         string[] lines = System.IO.File.ReadAllLines("./ReleaseNotes.md");
@@ -271,7 +316,7 @@ Task("GitHubTag")
 //////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("RunNUnitTest");
+    .IsDependentOn("GitHubTag");
 
 //////////////////////////////////////////////
 // Execution

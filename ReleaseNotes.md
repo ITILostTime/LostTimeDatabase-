@@ -1,3 +1,7 @@
+### New in 0.4.3 (Released : 24/05/2017)
+ 
+Patch Few Bugs On SQL script GoogleAccount
+ 
 ### New in 0.4.2 (Released : 24/05/2017)
  
 Patch few bug

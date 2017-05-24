@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LostTimeDB
 {
-    public sealed class DatabaseConnection
+    public sealed class GoogleAccount
     {
         public string BuildCake(string text)
         {
