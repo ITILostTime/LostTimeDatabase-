@@ -117,8 +117,8 @@ Task("CopyFiles")
         CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.pdb", CakeParameters.BuildResultDirectory + "bin");
         CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.dll", CakeParameters.BuildResultDirectory + "bin");
         CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.pdb", CakeParameters.BuildResultDirectory + "bin");
-        CopyFileToDirectory(CakeParameters.LostTimeDbUp + "bin/" + configuration + "/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin/DbUp");
-        CopyFileToDirectory(CakeParameters.LostTimeDbUp + "bin/" + configuration + "/LostTimeDB.pdb", CakeParameters.BuildResultDirectory + "bin/DbUp");
+        CopyFileToDirectory(CakeParameters.LostTimeDbUp + "bin/" + configuration + "/LostTimeDbUp.exe", CakeParameters.BuildResultDirectory + "bin/DbUp");
+        CopyFileToDirectory(CakeParameters.LostTimeDbUp + "bin/" + configuration + "/LostTimeDbUp.exe.config", CakeParameters.BuildResultDirectory + "bin/DbUp");
 
 
         CopyFiles(new FilePath[] {"License", "README.md", "ReleaseNotes.md"}, CakeParameters.BuildResultDirectory + "bin");
@@ -159,7 +159,7 @@ Task("CreateNugetPackage")
             {
                 new NuSpecContent 
                 {
-                    Source = "LostTimeDB.dll", Target = "bin"
+                    Source = "LostTimeDB.dll", Target = "lib\\net452"
                 },
             },
             BasePath = CakeParameters.BuildResultDirectory + "bin",
@@ -204,8 +204,11 @@ Task("CreateNugetDbUpPackage")
             {
                 new NuSpecContent 
                 {
-                    Source = "LostTimeDB.dll", Target = "bin"
-                },
+                    Source = ".exe", Target = "Tools"
+                },/*new NuSpecContent
+                {
+                    Source = ".exe.config", Target "Tools"
+                },*/
             },
             BasePath = CakeParameters.BuildResultDirectory + "bin/DbUp",
             OutputDirectory = CakeParameters.BuildResultDirectory,
@@ -326,7 +329,7 @@ Task("GitHubTag")
 //////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("GitHubTag");
+    .IsDependentOn("PublishMyGet");
 
 //////////////////////////////////////////////
 // Execution

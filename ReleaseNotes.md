@@ -1,3 +1,15 @@
+### New in 0.4.7 (Released : 24/05/2017)
+ 
+testMyGet
+ 
+### New in 0.4.6 (Released : 24/05/2017)
+ 
+Patch MyGet DbUp
+ 
+### New in 0.4.5 (Released : 24/05/2017)
+ 
+Patch
+ 
 ### New in 0.4.4 (Released : 24/05/2017)
  
 Package DbUp for Pierre
