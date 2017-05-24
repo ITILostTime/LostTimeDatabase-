@@ -44,6 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseConnection.cs" />
+    <Compile Include="News.cs" />
+    <Compile Include="CommentaryNews.cs" />
+    <Compile Include="CommentaryNewsGateway.cs" />
+    <Compile Include="NewsGateway.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserAccount.cs" />
     <Compile Include="UserAccountGateaway.cs" />
