@@ -1,3 +1,7 @@
+### New in 0.4.2 (Released : 24/05/2017)
+ 
+Patch few bug
+ 
 ### New in 0.4.1 (Released : 23/05/2017)
  
 Add few SQL fcts to start manage GoogleID and GoogleToken

@@ -58,26 +58,6 @@ namespace LostTimeDB
             }
         }
 
-        public UserAccount FindByGoogleID(int userGoogleID)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                return connection.Query<UserAccount>(
-                   @"select     s.UserID,
-                                s.UserPseudonym,
-                                s.UserEmail,
-                                s.UserPassword,
-                                s.UserAccountCreationDate,
-                                s.UserLastConnectionDate,
-                                s.UserGoogleToken,
-                                s.UserGoogleID
-                    from ViewUserAccountFindByGoogleID s
-                    where s.UserGoogleID = @UserGoogleID ;",
-                    new { UserGoogleID = userGoogleID })
-                    .FirstOrDefault();
-            }
-        }
-
         public void CreateNewUserAccount(string userPseudonym, string userEmail, string userPassword, DateTime date)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -96,26 +76,6 @@ namespace LostTimeDB
             }
         }
 
-        public void CreateNewUserAccount(string userPseudonym, string userEmail, string userPassword, DateTime date, string userGoogleToken, int userGoogleID)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Execute(
-                    "CreateNewUserAccountWithGoogleInformation",
-                    new
-                    {
-                        UserPseudonym = userPseudonym,
-                        UserEmail = userEmail,
-                        UserPassword = userPassword,
-                        UserAccountCreationDate = date,
-                        UserLastConnectionDate = date,
-                        UserGoogleToken = userGoogleToken,
-                        UserGoogleID = userGoogleID,
-                    },
-                    commandType: CommandType.StoredProcedure);
-            }
-        }
-
         public void DeleteUserAccountByName(string userPseudonym)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -125,20 +85,6 @@ namespace LostTimeDB
                     new
                     {
                         UserPseudonym = userPseudonym
-                    },
-                    commandType: CommandType.StoredProcedure);
-            }
-        }
-
-        public void DeleteUserAccountByGoogleID(int userGoogleID)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Execute(
-                    "DeleteUserAccountByGoogleID",
-                    new
-                    {
-                        UserGoogleID = userGoogleID
                     },
                     commandType: CommandType.StoredProcedure);
             }
