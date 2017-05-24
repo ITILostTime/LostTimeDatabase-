@@ -45,7 +45,7 @@ namespace LostTimeDBTest
         }
 
         [Test]
-        public void FindByIDTest()
+        public void FindByID_DeleteByIDTest()
         {
             LostTimeDB.UserAccountGateaway userAccountGateaway = new LostTimeDB.UserAccountGateaway(_connectionstring);
             LostTimeDB.UserAccount userAccount;
@@ -61,7 +61,9 @@ namespace LostTimeDBTest
             userAccount2 = userAccountGateaway.FindByID(userAccount.UserID);
             Assert.That(userAccount.UserID, Is.EqualTo(userAccount2.UserID));
 
-            userAccountGateaway.DeleteUserAccountByName(testUserPseudonym);
+            userAccountGateaway.DeleteUserAccountByUserID(userAccount2.UserID);
+            userAccount2 = userAccountGateaway.FindByID(userAccount.UserID);
+            Assert.That(userAccount2, Is.Null);
         }
 
         void CheckUserAccount(LostTimeDB.UserAccount userAccount, int userID, string userPseudonym, string userEmail, string userPassword, DateTime creationDate)

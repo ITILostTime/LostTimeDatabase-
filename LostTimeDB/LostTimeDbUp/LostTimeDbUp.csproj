@@ -110,5 +110,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Process\UserAccount\170524092732_CreateProcessAddGoogleIDGoogleToken.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\Process\UserAccount\170524110702_CreateProcessDeleteUserAccountByUserID.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

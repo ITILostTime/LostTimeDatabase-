@@ -8,11 +8,9 @@ CREATE TABLE UserAccount
 	UserPassword NVARCHAR(64) NOT NULL,
 	UserAccountCreationDate DATETIME2 NOT NULL,
 	UserLastConnectionDate DATETIME2,
-	UserGoogleToken NVARCHAR(64),
 	UserGoogleID INT,
-		
-	/*
-	UserGroupID int,
-	ActiveQuest json
-	*/
+	UserGoogleToken NVARCHAR(64),
+
+	CONSTRAINT FK_UserGoogleID FOREIGN KEY (UserGoogleID) REFERENCES UserGoogleIDToken (UserGoogleID),
+	CONSTRAINT FK_UserGoogleToken FOREIGN KEY (UserGoogleToken) REFERENCES UserGoogleIDToken (UserGoogleToken),
 );

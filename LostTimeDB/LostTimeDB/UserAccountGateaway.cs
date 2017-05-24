@@ -90,6 +90,20 @@ namespace LostTimeDB
             }
         }
 
+        public void DeleteUserAccountByUserID(int userID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Execute(
+                    "DeleteUserAccountByUserID",
+                    new
+                    {
+                        UserID = userID
+                    },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public void UpdateUserAccount(int userID, string userPseudonym, string userEmail, string userPassword)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
