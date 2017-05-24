@@ -63,6 +63,7 @@ Task("Clean")
             CakeParameters.BuildResultDirectory,
             Directory(CakeParameters.LostTimeDB + CleanFolder),
             Directory(CakeParameters.LostTimeDBTest + CleanFolder),
+            Directory(CakeParameters.LostTimeDbUp + CleanFolder)
         });
     });
 
@@ -110,11 +111,15 @@ Task("CopyFiles")
     .Does(() => 
     {
         EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin");
+        EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin/DbUp");
 
         CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin");
         CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.pdb", CakeParameters.BuildResultDirectory + "bin");
         CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.dll", CakeParameters.BuildResultDirectory + "bin");
         CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.pdb", CakeParameters.BuildResultDirectory + "bin");
+        CopyFileToDirectory(CakeParameters.LostTimeDbUp + "bin/" + configuration + "/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin/DbUp");
+        CopyFileToDirectory(CakeParameters.LostTimeDbUp + "bin/" + configuration + "/LostTimeDB.pdb", CakeParameters.BuildResultDirectory + "bin/DbUp");
+
 
         CopyFiles(new FilePath[] {"License", "README.md", "ReleaseNotes.md"}, CakeParameters.BuildResultDirectory + "bin");
     });
@@ -202,7 +207,7 @@ Task("CreateNugetDbUpPackage")
                     Source = "LostTimeDB.dll", Target = "bin"
                 },
             },
-            BasePath = CakeParameters.BuildResultDirectory + "bin",
+            BasePath = CakeParameters.BuildResultDirectory + "bin/DbUp",
             OutputDirectory = CakeParameters.BuildResultDirectory,
         };
 
@@ -261,6 +266,11 @@ Task("PublishMyGet")
 
         //      Push the package
         NuGetPush(CakeParameters.NugetPath, new NuGetPushSettings {
+            Source = apiUrl,
+            ApiKey = apiKey
+        });
+
+        NuGetPush(CakeParameters.NugetPathDbUp, new NuGetPushSettings {
             Source = apiUrl,
             ApiKey = apiKey
         });

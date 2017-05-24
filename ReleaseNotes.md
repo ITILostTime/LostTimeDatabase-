@@ -1,3 +1,7 @@
+### New in 0.4.4 (Released : 24/05/2017)
+ 
+Package DbUp for Pierre
+ 
 ### New in 0.4.3 (Released : 24/05/2017)
  
 Patch Few Bugs On SQL script GoogleAccount
