@@ -34,7 +34,7 @@ namespace LostTimeDB
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 con.Execute(
-                    "CreateNewsComment", 
+                    "CreateCommentaryNews", 
                     new
                     {
                         CommentaryNewsID = commentaryNewsID,
@@ -60,7 +60,7 @@ namespace LostTimeDB
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 con.Execute(
-                    "UpdateNewsComment",
+                    "UpdateCommentaryNews",
                     new
                     {
                         CommentaryNewsID = commentaryNewsID,
@@ -82,7 +82,7 @@ namespace LostTimeDB
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 con.Execute(
-                    "DeleteNewsComment",
+                    "DeleteCommentaryNews",
                     new
                     {
                         CommentaryNewsID = commentaryNewsID
@@ -101,9 +101,9 @@ namespace LostTimeDB
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return con.Query<CommentaryNews>(
-                    @"select nc.NewsCommentDate, nc.NewsCommentContent
-                    from ViewNewsComment nc
-                    where nc.NewsCommentID = @NewsCommentID;",
+                    @"select nc.CommentaryNewsDate, nc.CommentaryNewsContent
+                    from ViewCommentaryNews nc
+                    where nc.CommentaryNewsID = @CommentaryNewsID;",
                     new { CommentaryNewsID = commentaryNewsID })
                     .FirstOrDefault;
             }
@@ -114,19 +114,30 @@ namespace LostTimeDB
         /// </summary>
         /// <param name="newsCommentDate">The news comment date.</param>
         /// <returns></returns>
-        public CommentaryNews FindByDate(DateTime newsCommentDate)
+        public CommentaryNews FindByDate(DateTime commentaryNewsDate)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return con.Query<CommentaryNews>(
-                    @"select nc.NewsCommentID, nc.NewsCommentContent
-                    from ViewNewsComment nc
-                    where nc.NewsCommentDate = @NewsCommentDate;",
-                    new { NewsCommentDate = newsCommentDate })
+                    @"select nc.CommentaryNewsID, nc.CommentaryNewsContent
+                    from ViewCommentaryNews nc
+                    where nc.CommentaryNewsDate = @CommentaryNewsDate;",
+                    new { CommentaryNewsDate = commentaryNewsDate })
                     .FirstOrDefault;
             }
         }
 
-        //CreateByAuthorID
+        public CommentaryNews CreateByAuthorID(int commentaryNewsAuthorID)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return con.Query<CommentaryNews>(
+                    @"select nc.CommentaryNewsID, nc.CommentaryNewsDate, nc.NewsID, nc.CommentaryNewsContent
+                    from ViewCommentaryNews nc
+                    where nc.CommentaryNewsAuthorID = @CommentaryNewsAuthorID;",
+                    new { CommentaryNewsAuthorID = commentaryNewsAuthorID })
+                    .FirstOrDefault;
+            }
+        }
     }
 }

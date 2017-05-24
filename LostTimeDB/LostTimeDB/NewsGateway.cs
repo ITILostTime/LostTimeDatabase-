@@ -127,11 +127,22 @@ namespace LostTimeDB
             }
         }
 
+        public News FindByAuthorID(int authorID)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return con.Query<News>(
+                    @"select n.NewsID, n.NewsTitle, n.NewsContent
+                    from ViewNews n
+                    where n.AuthorID = @AuthorID;",
+                    new { AuthorID = authorID })
+                    .FirstOrDefault;
+            }
+        }
+
         /*public News GetByPopularity()
         {
 
         }*/
-
-        //FindByAuthorID
     }
 }
