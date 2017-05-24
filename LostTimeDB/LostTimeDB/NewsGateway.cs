@@ -12,17 +12,26 @@ namespace LostTimeDB
     {
         readonly string _connectionString;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewsGateway"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
         public NewsGateway(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        public News GetByID(int newsID)
+        /// <summary>
+        /// Finds the by identifier.
+        /// </summary>
+        /// <param name="newsID">The news identifier.</param>
+        /// <returns></returns>
+        public News FindByID(int newsID)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return con.Query<News>(
-                    @"select n.Date, n.Title, n.Content
+                    @"select n.NewsDate, n.NewsTitle, n.NewsContent
                     from ViewNews n
                     where n.NewsID = @NewsID;",
                     new {NewsID = newsID})
@@ -30,7 +39,17 @@ namespace LostTimeDB
             }
         }
 
-        public void CreateNews(int newsID, DateTime date, string title, string content, int authorID, int upVote, int downVote)
+        /// <summary>
+        /// Creates the news.
+        /// </summary>
+        /// <param name="newsID">The news identifier.</param>
+        /// <param name="newsDate">The news date.</param>
+        /// <param name="newsTitle">The news title.</param>
+        /// <param name="newsContent">Content of the news.</param>
+        /// <param name="authorID">The author identifier.</param>
+        /// <param name="upVote">Up vote.</param>
+        /// <param name="downVote">Down vote.</param>
+        public void CreateNews(int newsID, DateTime newsDate, string newsTitle, string newsContent, int authorID, int upVote, int downVote)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -39,9 +58,9 @@ namespace LostTimeDB
                     new
                     {
                         NewsID = newsID,
-                        Date = date,
-                        Title = title,
-                        Content = content,
+                        NewsDate = newsDate,
+                        NewsTitle = newsTitle,
+                        NewsContent = newsContent,
                         AuthorID = authorID,
                         UpVote = upVote,
                         DownVote = downVote
@@ -50,7 +69,13 @@ namespace LostTimeDB
             }
         }
 
-        public void UpdateNews(DateTime date, string title, string content)
+        /// <summary>
+        /// Updates the news.
+        /// </summary>
+        /// <param name="newsDate">The news date.</param>
+        /// <param name="newsTitle">The news title.</param>
+        /// <param name="newsContent">Content of the news.</param>
+        public void UpdateNews(DateTime newsDate, string newsTitle, string newsContent)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -58,14 +83,18 @@ namespace LostTimeDB
                     "UpdateNews",
                     new
                     {
-                        Date = date,
-                        Title = title,
-                        Content = content
+                        NewsDate = newsDate,
+                        NewsTitle = newsTitle,
+                        NewsContent = newsContent
                     },
                     commandType: CommandType.StoredProcedure);
             }
         }
 
+        /// <summary>
+        /// Deletes the news.
+        /// </summary>
+        /// <param name="newsID">The news identifier.</param>
         public void DeleteNews(int newsID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -74,28 +103,35 @@ namespace LostTimeDB
                     "DeleteNews",
                     new
                     {
-                        NewsID = newsID,
+                        NewsID = newsID
                     },
                     commandType: CommandType.StoredProcedure);
             }
         }
 
-        public News GetByDates(DateTime date)
+        /// <summary>
+        /// Finds the by dates.
+        /// </summary>
+        /// <param name="newsDate">The news date.</param>
+        /// <returns></returns>
+        public News FindByDates(DateTime newsDate)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 return con.Query<News>(
-                    @"select n.Title, n.Content
+                    @"select n.NewsTitle, n.NewsContent
                     from ViewsNews n 
-                    where n.Date = @Date;",
-                    new { Date = date })
+                    where n.NewsDate = @NewsDate;",
+                    new { NewsDate = newsDate })
                     .FirstOrDefault;
             }
         }
 
-        public News GetByPopularity()
+        /*public News GetByPopularity()
         {
 
-        }
+        }*/
+
+        //FindByAuthorID
     }
 }

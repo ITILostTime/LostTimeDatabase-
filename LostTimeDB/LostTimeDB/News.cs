@@ -9,9 +9,9 @@ namespace LostTimeDB
     public class News
     {
         public int NewsID { get; set; }
-        public DateTime Date { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
+        public DateTime NewsDate { get; set; }
+        public string NewsTitle { get; set; }
+        public string NewsContent { get; set; }
         public int AuthorID { get; set; } 
         public int UpVote { get; set; }
         public int DownVote { get; set; }
