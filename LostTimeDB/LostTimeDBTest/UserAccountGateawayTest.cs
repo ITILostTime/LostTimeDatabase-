@@ -60,10 +60,48 @@ namespace LostTimeDBTest
             userAccount = userAccountGateaway.FindByName(testUserPseudonym);
             userAccount2 = userAccountGateaway.FindByID(userAccount.UserID);
             Assert.That(userAccount.UserID, Is.EqualTo(userAccount2.UserID));
+            Assert.That(userAccount.UserGoogleID, Is.EqualTo(0));
+            Assert.That(userAccount.UserGoogleToken, Is.EqualTo(null));
 
             userAccountGateaway.DeleteUserAccountByUserID(userAccount2.UserID);
             userAccount2 = userAccountGateaway.FindByID(userAccount.UserID);
             Assert.That(userAccount2, Is.Null);
+        }
+
+        [Test]
+        public void DeleteByGoogleIDTest()
+        {
+            LostTimeDB.UserAccountGateaway userAccountGateaway = new LostTimeDB.UserAccountGateaway(_connectionstring);
+            LostTimeDB.GoogleAccountGateaway googleAccountGateaway = new LostTimeDB.GoogleAccountGateaway(_connectionstring);
+
+            LostTimeDB.UserAccount userAccount;
+            LostTimeDB.UserAccount userAccount2;
+
+            string testUserPseudonym = "TestFindByIDPseudonymTest3";
+            string testUserEmail = "TestFindByIDEmailTest3";
+            string testUserPassword = "TestFindByIDPasswordTest3";
+
+            int googleID = 321;
+            string googleToken = "googleTokenTest3";
+
+            userAccountGateaway.CreateNewUserAccount(testUserPseudonym, testUserEmail, testUserPassword, DateTime.Now);
+
+            userAccount = userAccountGateaway.FindByName(testUserPseudonym);
+
+            googleAccountGateaway.Create(googleID, googleToken);
+            googleAccountGateaway.AssignGoogleIDToUserID(googleID, googleToken, userAccount.UserID);
+
+            userAccount = userAccountGateaway.FindByName(testUserPseudonym);
+
+            Assert.That(userAccount.UserGoogleID, Is.EqualTo(googleID));
+
+            userAccountGateaway.DeleteUserAccountByGoogleID(userAccount.UserGoogleID);
+
+            userAccount2 = userAccountGateaway.FindByGoogleID(userAccount.UserGoogleID);
+
+            Assert.That(userAccount2, Is.Null);
+
+            googleAccountGateaway.DeleteGoogleAccountByGoogleID(googleID);
         }
 
         void CheckUserAccount(LostTimeDB.UserAccount userAccount, int userID, string userPseudonym, string userEmail, string userPassword, DateTime creationDate)

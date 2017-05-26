@@ -57,6 +57,25 @@ namespace LostTimeDB
                     .FirstOrDefault();
             }
         }
+        public UserAccount FindByGoogleID(int userGoogleID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                return connection.Query<UserAccount>(
+                    @"select    s.UserID,
+                                s.UserPseudonym,
+                                s.UserEmail,
+                                s.UserPassword,
+                                s.UserAccountCreationDate,
+                                s.UserLastConnectionDate,
+                                s.UserGoogleID,
+                                s.UserGoogleToken
+                        from ViewUserAccountFindByGoogleID s
+                        where s.UserGoogleID = @UserGoogleID;",
+                        new { UserGoogleID = userGoogleID })
+                        .FirstOrDefault();
+            }
+        }
 
         public void CreateNewUserAccount(string userPseudonym, string userEmail, string userPassword, DateTime date)
         {
@@ -99,6 +118,20 @@ namespace LostTimeDB
                     new
                     {
                         UserID = userID
+                    },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public void DeleteUserAccountByGoogleID(int googleID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Execute(
+                    "DeleteUserAccountByGoogleID",
+                    new
+                    {
+                        UserGoogleID = googleID
                     },
                     commandType: CommandType.StoredProcedure);
             }

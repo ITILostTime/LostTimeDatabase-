@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace LostTimeDB
 {
-    public sealed class GoogleAccount
+    public class GoogleAccount
     {
-        public string BuildCake(string text)
-        {
-            return (text);
-        }
+        public int GoogleID { get; set; }
+
+        public string GoogleToken { get; set; }
     }
 }

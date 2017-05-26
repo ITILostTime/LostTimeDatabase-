@@ -204,11 +204,13 @@ Task("CreateNugetDbUpPackage")
             {
                 new NuSpecContent 
                 {
-                    Source = ".exe", Target = "Tools"
-                },/*new NuSpecContent
+                    Source = "*.exe", Target = "Tools"
+                },
+                new NuSpecContent 
                 {
-                    Source = ".exe.config", Target "Tools"
-                },*/
+                    Source = "*.exe.condig", Target = "Tools"
+                },
+                
             },
             BasePath = CakeParameters.BuildResultDirectory + "bin/DbUp",
             OutputDirectory = CakeParameters.BuildResultDirectory,
@@ -329,7 +331,7 @@ Task("GitHubTag")
 //////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("PublishMyGet");
+    .IsDependentOn("GitHubTag");
 
 //////////////////////////////////////////////
 // Execution
