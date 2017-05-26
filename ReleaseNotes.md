@@ -1,3 +1,7 @@
+### New in 0.4.9 (Released : 26/05/2017)
+ 
+Same Test as before just to be sure
+ 
 ### New in 0.4.8 (Released : 26/05/2017)
  
 Add process/view to SQL Project Part for Web Part
