@@ -6,14 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LostTimeDB", "LostTimeDB\LostTimeDB.csproj", "{175226AE-2AB5-4E44-A885-B26A2D1060F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LostTimeDBTest", "LostTimeDBTest\LostTimeDBTest.csproj", "{60C4F263-01B6-4B53-834A-386D4FD50E73}"
-	ProjectSection(ProjectDependencies) = postProject
-		{175226AE-2AB5-4E44-A885-B26A2D1060F0} = {175226AE-2AB5-4E44-A885-B26A2D1060F0}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LostTimeDbUp", "LostTimeDbUp\LostTimeDbUp.csproj", "{FAAD2365-BC22-42F9-A10F-764F9A7F55BF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{175226AE-2AB5-4E44-A885-B26A2D1060F0} = {175226AE-2AB5-4E44-A885-B26A2D1060F0}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

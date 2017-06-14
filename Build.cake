@@ -72,7 +72,7 @@ Task("RestoreNugetPackage")
     .IsDependentOn("Clean")
     .Does(() => 
     {
-        NuGetRestore(CakeParameters.ProjectSolution);
+        DotNetCoreRestore(CakeParameters.ProjectSolution);
     });
 
 // Build Project .sln
@@ -80,8 +80,10 @@ Task("Build")
     .IsDependentOn("RestoreNugetPackage")
     .Does(() => 
     {
-        DotNetBuild(CakeParameters.ProjectSolution, settings =>
-            settings.SetConfiguration(configuration));
+        DotNetCoreBuild(CakeParameters.ProjectSolution, new DotNetCoreBuildSettings
+        {
+            Configuration = configuration
+        });
     });
 
 // Run NUnit Test
@@ -89,12 +91,39 @@ Task("RunNUnitTest")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        var testsFile = CakeParameters.ProjectApplicationTestDLL + configuration + "/*Test.dll";
+        var extensions = new[] { "exe", "dll" };
+        
+        foreach(var extension in extensions)
+        {
+            var testsFile = CakeParameters.ProjectApplicationTestDLL + configuration + "/**/*Test." + extension;
 
-        NUnit3(testsFile, new NUnit3Settings {
-        Results = CakeParameters.ProjectApplicationResultBuild,
-        NoResults = false,
-        });
+            Information(testsFile);
+            foreach(var file in GetFiles(testsFile))
+            {
+                Information(file);
+                if (extension == "exe") StartProcess(file);
+                else if (extension == "dll") 
+                {
+                    //DotNetCoreRun(testsFile);
+                    
+                    /*StartProcess("dotnet", "run" + CakeParameters.ProjectSolution, new ProcessSettings
+                    {
+                        Arguments = configuration,
+                        WorkingDirectory = file.GetDirectory()
+                    });*/
+
+                    DotNetCoreExecute(file);
+                    
+                    /*NUnit3(testsFile, new NUnit3Settings {
+                    Results = CakeParameters.ProjectApplicationResultBuild,
+                    NoResults = false,
+                    });*/
+
+
+                }
+                else throw new Exception(string.Format("Unknown extension {0}", extension));
+            }
+        }
     });
 
 // CopyFiles in the Versioning Folder
