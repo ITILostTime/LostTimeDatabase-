@@ -80,16 +80,8 @@ Task("Build")
     .IsDependentOn("RestoreNugetPackage")
     .Does(() => 
     {
-        if(IsRunningOnWindows())
-        {
-        MSBuild(CakeParameters.ProjectSolution, settings =>
+        DotNetBuild(CakeParameters.ProjectSolution, settings =>
             settings.SetConfiguration(configuration));
-        }
-        else
-        {
-        XBuild(CakeParameters.ProjectSolution, settings =>
-            settings.SetConfiguration(configuration));
-        }
     });
 
 // Run NUnit Test
@@ -113,7 +105,8 @@ Task("CopyFiles")
         EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin");
         EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin/DbUp");
 
-        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin");
+        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "net452/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin/net452");
+        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "netstandard1.4/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin/netstandard1.4");
         CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.pdb", CakeParameters.BuildResultDirectory + "bin");
         CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.dll", CakeParameters.BuildResultDirectory + "bin");
         CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.pdb", CakeParameters.BuildResultDirectory + "bin");
@@ -159,8 +152,12 @@ Task("CreateNugetPackage")
             {
                 new NuSpecContent 
                 {
-                    Source = "LostTimeDB.dll", Target = "lib\\net452"
+                    Source = "net452\\LostTimeDB.dll", Target = "lib\\net452"
                 },
+                new NuSpecContent 
+                {
+                    Source = "netstandard1.4\\LostTimeDB.dll", Target = "lib\\netstandard1.4"
+                }
             },
             BasePath = CakeParameters.BuildResultDirectory + "bin",
             OutputDirectory = CakeParameters.BuildResultDirectory,
@@ -205,10 +202,6 @@ Task("CreateNugetDbUpPackage")
                 new NuSpecContent 
                 {
                     Source = "*.exe", Target = "Tools"
-                },
-                new NuSpecContent 
-                {
-                    Source = "*.exe.condig", Target = "Tools"
                 },
                 
             },
@@ -331,7 +324,7 @@ Task("GitHubTag")
 //////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("GitHubTag");
+    .IsDependentOn("RunNUnitTest");
 
 //////////////////////////////////////////////
 // Execution
