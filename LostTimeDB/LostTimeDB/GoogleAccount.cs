@@ -8,7 +8,7 @@ namespace LostTimeDB
 {
     public class GoogleAccount
     {
-        public int GoogleID { get; set; }
+        public string GoogleID { get; set; }
 
         public string GoogleToken { get; set; }
     }

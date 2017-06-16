@@ -2,7 +2,7 @@
 
 CREATE PROCEDURE CreateNewUserGoogleIDToken
 (
-	@UserGoogleID INT,
+	@UserGoogleID NVARCHAR(64),
 	@UserGoogleToken NVARCHAR(64)
 )
 AS

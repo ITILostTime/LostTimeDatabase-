@@ -1,3 +1,11 @@
+### New in 0.5.1 (Released : 16/06/2017)
+ 
+Patch CI with adding new Path of Projects and correc some bugs
+ 
+### New in 0.5.0 (Releases : 05/06/2017)
+
+Manual modification to package the project in .Net Standard v1.4 for Pierre Mac
+
 ### New in 0.4.10 (Released : 02/06/2017)
  
 putcorrectionDbUpPackageSendToMyGet

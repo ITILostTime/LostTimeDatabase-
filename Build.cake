@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.IO;
 
+#addin Cake.Email
+
 //////////////////////////////////////////////
 // Load / Add Script
 //////////////////////////////////////////////
@@ -104,22 +106,7 @@ Task("RunNUnitTest")
                 if (extension == "exe") StartProcess(file);
                 else if (extension == "dll") 
                 {
-                    //DotNetCoreRun(testsFile);
-                    
-                    /*StartProcess("dotnet", "run" + CakeParameters.ProjectSolution, new ProcessSettings
-                    {
-                        Arguments = configuration,
-                        WorkingDirectory = file.GetDirectory()
-                    });*/
-
                     DotNetCoreExecute(file);
-                    
-                    /*NUnit3(testsFile, new NUnit3Settings {
-                    Results = CakeParameters.ProjectApplicationResultBuild,
-                    NoResults = false,
-                    });*/
-
-
                 }
                 else throw new Exception(string.Format("Unknown extension {0}", extension));
             }
@@ -133,14 +120,24 @@ Task("CopyFiles")
     {
         EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin");
         EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin/DbUp");
+        EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin/net461");
+        EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin/netstandard1.4");
+        EnsureDirectoryExists(CakeParameters.BuildResultDirectory + "bin/netcoreapp1.1");
 
-        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "net452/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin/net452");
-        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "netstandard1.4/LostTimeDB.dll", CakeParameters.BuildResultDirectory + "bin/netstandard1.4");
-        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/LostTimeDB.pdb", CakeParameters.BuildResultDirectory + "bin");
-        CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.dll", CakeParameters.BuildResultDirectory + "bin");
-        CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/LostTimeDBTest.pdb", CakeParameters.BuildResultDirectory + "bin");
-        CopyFileToDirectory(CakeParameters.LostTimeDbUp + "bin/" + configuration + "/LostTimeDbUp.exe", CakeParameters.BuildResultDirectory + "bin/DbUp");
-        CopyFileToDirectory(CakeParameters.LostTimeDbUp + "bin/" + configuration + "/LostTimeDbUp.exe.config", CakeParameters.BuildResultDirectory + "bin/DbUp");
+        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/net461/LostTimeDB.dll", 
+        CakeParameters.BuildResultDirectory + "bin/net461");
+
+        CopyFileToDirectory(CakeParameters.LostTimeDB + "bin/" + configuration + "/netstandard1.4/LostTimeDB.dll", 
+        CakeParameters.BuildResultDirectory + "bin/netstandard1.4");
+
+        CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/net461/LostTimeDBTest.exe", 
+        CakeParameters.BuildResultDirectory + "bin/net461");
+
+        CopyFileToDirectory(CakeParameters.LostTimeDBTest + "bin/" + configuration + "/netcoreapp1.1/LostTimeDBTest.dll", 
+        CakeParameters.BuildResultDirectory + "bin/netcoreapp1.1");
+
+        CopyFileToDirectory(CakeParameters.LostTimeDbUp + "bin/" + configuration + "/net461/LostTimeDbUp.exe", 
+        CakeParameters.BuildResultDirectory + "bin/DbUp");
 
 
         CopyFiles(new FilePath[] {"License", "README.md", "ReleaseNotes.md"}, CakeParameters.BuildResultDirectory + "bin");
@@ -181,7 +178,7 @@ Task("CreateNugetPackage")
             {
                 new NuSpecContent 
                 {
-                    Source = "net452\\LostTimeDB.dll", Target = "lib\\net452"
+                    Source = "net461\\LostTimeDB.dll", Target = "lib\\net461"
                 },
                 new NuSpecContent 
                 {
@@ -304,9 +301,16 @@ Task("PublishMyGet")
         
     });
 
+Task("SendAMailToTheTeam")
+    .IsDependentOn("PublishMyGet")
+    .Does(() => 
+    {
+
+    });
+
 // Commit in GitHub
 Task("GitHubCommit")
-    .IsDependentOn("ReleaseNotesWriteText")
+    .IsDependentOn("SendAMailToTheTeam")
     .Does(() =>
     {
         Console.WriteLine("Write a note for your commit without space");

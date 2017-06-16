@@ -57,7 +57,7 @@ namespace LostTimeDB
                     .FirstOrDefault();
             }
         }
-        public UserAccount FindByGoogleID(int userGoogleID)
+        public UserAccount FindByGoogleID(string userGoogleID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -77,7 +77,7 @@ namespace LostTimeDB
             }
         }
 
-        public void CreateNewUserAccount(string userPseudonym, string userEmail, string userPassword, DateTime date)
+        public void CreateNewUserAccount(string userPseudonym, string userEmail, byte[] userPassword, DateTime date)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -123,7 +123,7 @@ namespace LostTimeDB
             }
         }
 
-        public void DeleteUserAccountByGoogleID(int googleID)
+        public void DeleteUserAccountByGoogleID(string googleID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -137,7 +137,7 @@ namespace LostTimeDB
             }
         }
 
-        public void UpdateUserAccount(int userID, string userPseudonym, string userEmail, string userPassword)
+        public void UpdateUserAccount(int userID, string userPseudonym, string userEmail, byte[] userPassword)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

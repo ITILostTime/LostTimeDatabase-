@@ -23,9 +23,9 @@ namespace LostTimeDBTest
 
             string Pseudo = "PseudoTest";
             string Email = "Email@Test.com";
-            string Mdp = "MdpTest";
+            byte[] Mdp = Guid.NewGuid().ToByteArray();
 
-            int GoogleID = 123;
+            string GoogleID = "123abc";
             string GoogleToken = "googleTokenTest";
             
 

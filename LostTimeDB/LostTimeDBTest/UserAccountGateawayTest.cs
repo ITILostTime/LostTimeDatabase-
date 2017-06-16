@@ -22,12 +22,12 @@ namespace LostTimeDBTest
 
             string testUserPseudonym = "TestUserPseudonymTest1";
             string testUserEmail = "TestUserEmailTest1";
-            string testUserPassword = "TestUserPasswordTest1";
+            byte[] testUserPassword = Guid.NewGuid().ToByteArray();
 
 
             string TestUserUpdatePseudonym = "TestUserUpdatePseudonymTest1";
             string TestUserUpdateEmail = "TestUserUpdateEmailTest1";
-            string TestUserUpdatePassword = "TestUserUpdatePasswordTest1";
+            byte[] TestUserUpdatePassword = Guid.NewGuid().ToByteArray();
 
             userAccountGateaway.CreateNewUserAccount(testUserPseudonym, testUserEmail, testUserPassword, DateTime.Now);
 
@@ -53,14 +53,14 @@ namespace LostTimeDBTest
 
             string testUserPseudonym = "TestFindByIDPseudonymTest2";
             string testUserEmail = "TestFindByIDEmailTest2";
-            string testUserPassword = "TestFindByIDPasswordTest2";
+            byte[] testUserPassword = Guid.NewGuid().ToByteArray();
 
             userAccountGateaway.CreateNewUserAccount(testUserPseudonym, testUserEmail, testUserPassword, DateTime.Now);
 
             userAccount = userAccountGateaway.FindByName(testUserPseudonym);
             userAccount2 = userAccountGateaway.FindByID(userAccount.UserID);
             Assert.That(userAccount.UserID, Is.EqualTo(userAccount2.UserID));
-            Assert.That(userAccount.UserGoogleID, Is.EqualTo(0));
+            Assert.That(userAccount.UserGoogleID, Is.EqualTo(null));
             Assert.That(userAccount.UserGoogleToken, Is.EqualTo(null));
 
             userAccountGateaway.DeleteUserAccountByUserID(userAccount2.UserID);
@@ -79,9 +79,9 @@ namespace LostTimeDBTest
 
             string testUserPseudonym = "TestFindByIDPseudonymTest3";
             string testUserEmail = "TestFindByIDEmailTest3";
-            string testUserPassword = "TestFindByIDPasswordTest3";
+            byte[] testUserPassword = Guid.NewGuid().ToByteArray();
 
-            int googleID = 321;
+            string googleID = "321abc";
             string googleToken = "googleTokenTest3";
 
             userAccountGateaway.CreateNewUserAccount(testUserPseudonym, testUserEmail, testUserPassword, DateTime.Now);
@@ -104,7 +104,7 @@ namespace LostTimeDBTest
             googleAccountGateaway.DeleteGoogleAccountByGoogleID(googleID);
         }
 
-        void CheckUserAccount(LostTimeDB.UserAccount userAccount, int userID, string userPseudonym, string userEmail, string userPassword, DateTime creationDate)
+        void CheckUserAccount(LostTimeDB.UserAccount userAccount, int userID, string userPseudonym, string userEmail, byte[] userPassword, DateTime creationDate)
         {
             Assert.That(userAccount.UserID, Is.EqualTo(userID));
             Assert.That(userAccount.UserPseudonym, Is.EqualTo(userPseudonym));

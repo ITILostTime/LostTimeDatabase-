@@ -6,7 +6,7 @@ AS
 		UserID = s.UserID,
 		UserPseudonym = s.UserPseudonym,
 		UserEmail = s.UserEmail,
-		UserPassword = s.UserPassword,
+		[UserPassword] = s.UserPassword,
 		UserAccountCreationDate = s.UserAccountCreationDate,
 		UserLastConnectionDate  = s.UserLastConnectionDate,
 		UserGoogleToken = s.UserGoogleToken,

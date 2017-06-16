@@ -18,7 +18,7 @@ namespace LostTimeDB
             _connectionString = connectionString;
         }
 
-        public void Create( int userGoogleID, string userGoogleToken)
+        public void Create( string userGoogleID, string userGoogleToken)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -33,7 +33,7 @@ namespace LostTimeDB
             }
         }
 
-        public void AssignGoogleIDToUserID(int userGoogleID, string userGoogleToken, int userID)
+        public void AssignGoogleIDToUserID(string userGoogleID, string userGoogleToken, int userID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -49,7 +49,7 @@ namespace LostTimeDB
             }
         }
 
-        public void DeleteGoogleAccountByGoogleID(int googleID)
+        public void DeleteGoogleAccountByGoogleID(string googleID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

@@ -2,7 +2,7 @@
 
 CREATE PROCEDURE DeleteGoogleAccountByGoogleID
 (
-	@UserGoogleID INT
+	@UserGoogleID NVARCHAR(64)
 )
 AS
 BEGIN

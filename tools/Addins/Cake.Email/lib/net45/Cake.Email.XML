@@ -1,0 +1,316 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cake.Email</name>
+    </assembly>
+    <members>
+        <member name="T:Cake.Email.EmailAliases">
+            <summary>
+            <para>Contains aliases related to emails.</para>
+            <para>
+            In order to use the commands for this addin, you will need to include the following in your build.cake file to download and
+            reference from NuGet.org:
+            <code>
+            #addin Cake.Email
+            </code>
+            </para>
+            </summary>
+        </member>
+        <member name="M:Cake.Email.EmailAliases.Email(Cake.Core.ICakeContext)">
+            <summary>
+            Gets a <see cref="T:Cake.Email.EmailProvider"/> instance that can be used for sending emails.
+            </summary>
+            <param name="context">The context.</param>
+            <returns>A <see cref="T:Cake.Email.EmailProvider"/> instance.</returns>
+        </member>
+        <member name="T:Cake.Email.EmailProvider">
+            <summary>
+            Contains functionality related to emails
+            </summary>
+        </member>
+        <member name="M:Cake.Email.EmailProvider.#ctor(Cake.Core.ICakeContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cake.Email.EmailProvider"/> class.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="M:Cake.Email.EmailProvider.SendEmail(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IEnumerable{System.Net.Mail.AttachmentBase},Cake.Email.EmailSettings)">
+            <summary>
+            Sends an email via SMTP, based on the provided settings
+            </summary>
+            <param name="senderName">The name of the person sending the email</param>
+            <param name="senderAddress">The email address of the person sending the email</param>
+            <param name="recipientName">The name of the person who will receive the email</param>
+            <param name="recipientAddress">The email address of the person who will recieve the email</param>
+            <param name="subject">The subject line of the email</param>
+            <param name="htmlContent">The HTML content of the email</param>
+            <param name="textContent">The text content of the email</param>
+            <param name="attachments">Attachments to send with the email</param>
+            <param name="settings">The settings to be used when sending the email</param>
+            <returns>An instance of <see cref="T:Cake.Email.EmailResult"/> indicating success/failure</returns>
+            <example>
+            <code>
+            var smtpHost = "... your smtp host ...";
+            var port = 1234;
+            var enableSsl = true;
+            var username = "... your username ...";
+            var password = "... your password ...";
+            var attachments = new[]
+            {
+                Email.CreateAttachmentFromLocalFile("C:\\temp\\MyFile.txt"),
+                Email.CreateAttachmentFromLocalFile("C:\\temp\\MySpreadsheet.xls"),
+                Email.CreateAttachmentFromLocalFile("C:\\temp\\MyFile.pdf"),
+            };
+            try
+            {
+                var result = Email.SendEmail(
+                    senderName: "Bob Smith",
+                    senderAddress: "bob@example.com",
+                    recipientName: "Jane Doe",
+                    recipientAddress: "jane@example.com",
+                    subject: "This is a test",
+                    htmlContent: "<html><body>This is a test</body></html>",
+                    textContent: "This is the text only version of this email",
+                    attachments: attachments,
+                    settings: new EmailSettings
+                    {
+                        SmtpHost = smtpHost,
+                        Port = port,
+                        EnableSsl = enableSsl,
+                        Username = username,
+                        Password = password
+                    }
+                );
+                if (result.Ok)
+                {
+                    Information("Email succcessfully sent");
+                }
+                else
+                {
+                    Error("Failed to send email: {0}", result.Error);
+                }
+            }
+            catch(Exception ex)
+            {
+                Error("{0}", ex);
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Cake.Email.EmailProvider.SendEmail(System.String,System.String,System.Net.Mail.MailAddress,System.String,System.String,System.String,System.Collections.Generic.IEnumerable{System.Net.Mail.AttachmentBase},Cake.Email.EmailSettings)">
+            <summary>
+            Sends an email via SMTP, based on the provided settings
+            </summary>
+            <param name="senderName">The name of the person sending the email</param>
+            <param name="senderAddress">The email address of the person sending the email</param>
+            <param name="recipient">The recipient who will receive the email</param>
+            <param name="subject">The subject line of the email</param>
+            <param name="htmlContent">The HTML content of the email</param>
+            <param name="textContent">The text content of the email</param>
+            <param name="attachments">Attachments to send with the email</param>
+            <param name="settings">The settings to be used when sending the email</param>
+            <returns>An instance of <see cref="T:Cake.Email.EmailResult"/> indicating success/failure</returns>
+            <example>
+            <code>
+            var smtpHost = "... your smtp host ...";
+            var port = 1234;
+            var enableSsl = true;
+            var username = "... your username ...";
+            var password = "... your password ...";
+            var attachments = new[]
+            {
+                Email.CreateAttachmentFromLocalFile("C:\\temp\\MyFile.txt"),
+                Email.CreateAttachmentFromLocalFile("C:\\temp\\MySpreadsheet.xls"),
+                Email.CreateAttachmentFromLocalFile("C:\\temp\\MyFile.pdf"),
+            };
+            try
+            {
+                var result = Email.SendEmail(
+                    senderName: "Bob Smith",
+                    senderAddress: "bob@example.com",
+                    recipient: new MailAddress("jane@example.com", "Jane Doe"),
+                    subject: "This is a test",
+                    htmlContent: "<html><body>This is a test</body></html>",
+                    textContent: "This is the text only version of this email",
+                    attachments: attachments,
+                    settings: new EmailSettings
+                    {
+                        SmtpHost = smtpHost,
+                        Port = port,
+                        EnableSsl = enableSsl,
+                        Username = username,
+                        Password = password
+                    }
+                );
+                if (result.Ok)
+                {
+                    Information("Email succcessfully sent");
+                }
+                else
+                {
+                    Error("Failed to send email: {0}", result.Error);
+                }
+            }
+            catch(Exception ex)
+            {
+                Error("{0}", ex);
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Cake.Email.EmailProvider.SendEmail(System.String,System.String,System.Collections.Generic.IEnumerable{System.Net.Mail.MailAddress},System.String,System.String,System.String,System.Collections.Generic.IEnumerable{System.Net.Mail.AttachmentBase},Cake.Email.EmailSettings)">
+            <summary>
+            Sends an email via SMTP, based on the provided settings
+            </summary>
+            <param name="senderName">The name of the person sending the email</param>
+            <param name="senderAddress">The email address of the person sending the email</param>
+            <param name="recipients">An enumeration of recipients who will receive the email</param>
+            <param name="subject">The subject line of the email</param>
+            <param name="htmlContent">The HTML content of the email</param>
+            <param name="textContent">The text content of the email</param>
+            <param name="attachments">Attachments to send with the email</param>
+            <param name="settings">The settings to be used when sending the email</param>
+            <returns>An instance of <see cref="T:Cake.Email.EmailResult"/> indicating success/failure</returns>
+            <example>
+            <code>
+            var smtpHost = "... your smtp host ...";
+            var port = 1234;
+            var enableSsl = true;
+            var username = "... your username ...";
+            var password = "... your password ...";
+            var attachments = new[]
+            {
+                Email.CreateAttachmentFromLocalFile("C:\\temp\\MyFile.txt"),
+                Email.CreateAttachmentFromLocalFile("C:\\temp\\MySpreadsheet.xls"),
+                Email.CreateAttachmentFromLocalFile("C:\\temp\\MyFile.pdf"),
+            };
+            try
+            {
+                var result = Email.SendEmail(
+                    senderName: "Bob Smith",
+                    senderAddress: "bob@example.com",
+                    recipients: new[]
+                    {
+                        new MailAddress("jane@example.com", "Jane Doe"),
+                        new MailAddress("bod@example.com", "Bob Smith"),
+                    },
+                    subject: "This is a test",
+                    htmlContent: "<html><body>This is a test</body></html>",
+                    textContent: "This is the text only version of this email",
+                    attachments: attachments,
+                    settings: new EmailSettings
+                    {
+                        SmtpHost = smtpHost,
+                        Port = port,
+                        EnableSsl = enableSsl,
+                        Username = username,
+                        Password = password
+                    }
+                );
+                if (result.Ok)
+                {
+                    Information("Email succcessfully sent");
+                }
+                else
+                {
+                    Error("Failed to send email: {0}", result.Error);
+                }
+            }
+            catch(Exception ex)
+            {
+                Error("{0}", ex);
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Cake.Email.EmailProvider.CreateAttachmentFromLocalFile(System.String,System.String,System.String)">
+            <summary>
+            Convenience method that creates an attachment from a local file.
+            </summary>
+            <param name="filePath">The file path.</param>
+            <param name="mimeType">Optional: MIME type of the attachment. If this parameter is null, the MIME type will be derived from the file extension.</param>
+            <param name="contentId">Optional: the unique identifier for this attachment IF AND ONLY IF the attachment should be embedded in the body of the email. This is useful, for example, if you want to embbed an image to be displayed in the HTML content. For standard attachment, this value should be null.</param>
+            <returns>The attachment</returns>
+            <exception cref="T:System.IO.FileNotFoundException">Unable to find the local file</exception>
+        </member>
+        <member name="M:Cake.Email.EmailProvider.CreateAttachmentFromStream(System.IO.Stream,System.String,System.String,System.String)">
+            <summary>
+            Convenience method that creates an attachment from a stream.
+            </summary>
+            <param name="contentStream">The stream.</param>
+            <param name="fileName">The name of the attachment.</param>
+            <param name="mimeType">Optional: MIME type of the attachment. If this parameter is null, the MIME type will be derived from the fileName extension.</param>
+            <param name="contentId">Optional: the unique identifier for this attachment IF AND ONLY IF the attachment should be embedded in the body of the email. This is useful, for example, if you want to embbed an image to be displayed in the HTML content. For standard attachment, this value should be null.</param>
+            <returns>The attachment</returns>
+        </member>
+        <member name="T:Cake.Email.EmailResult">
+            <summary>
+            The result of EmailProvider
+            </summary>
+        </member>
+        <member name="M:Cake.Email.EmailResult.#ctor(System.Boolean,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cake.Email.EmailResult"/> class.
+            </summary>
+            <param name="ok">Indicating success or failure</param>
+            <param name="timeStamp">Timestamp of the message</param>
+            <param name="error">Error message on failure</param>
+        </member>
+        <member name="P:Cake.Email.EmailResult.Ok">
+            <summary>
+            Gets a value indicating whether success or failure, <see cref="P:Cake.Email.EmailResult.Error"/> for info on failure
+            </summary>
+        </member>
+        <member name="P:Cake.Email.EmailResult.TimeStamp">
+            <summary>
+            Gets the Timestamp of the message
+            </summary>
+        </member>
+        <member name="P:Cake.Email.EmailResult.Error">
+            <summary>
+            Gets the Error message on failure
+            </summary>
+        </member>
+        <member name="M:Cake.Email.EmailResult.ToString">
+            <summary>
+            Convert this instance of value to a string representation
+            </summary>
+            <returns>The complete string representation of the EmailResult</returns>
+        </member>
+        <member name="T:Cake.Email.EmailSettings">
+            <summary>
+            Class that lets you override default API settings
+            </summary>
+        </member>
+        <member name="P:Cake.Email.EmailSettings.SmtpHost">
+            <summary>
+            Gets or sets the SMTP host
+            </summary>
+        </member>
+        <member name="P:Cake.Email.EmailSettings.Port">
+            <summary>
+            Gets or sets the port of the SMTP host
+            </summary>
+        </member>
+        <member name="P:Cake.Email.EmailSettings.EnableSsl">
+            <summary>
+            Gets or sets a value indicating whether the connection should be encrypted using Ssl
+            </summary>
+        </member>
+        <member name="P:Cake.Email.EmailSettings.Username">
+            <summary>
+            Gets or sets the username
+            </summary>
+        </member>
+        <member name="P:Cake.Email.EmailSettings.Password">
+            <summary>
+            Gets or sets the password
+            </summary>
+        </member>
+        <member name="P:Cake.Email.EmailSettings.ThrowOnFail">
+            <summary>
+            Gets or sets the Optional flag for if should throw exception on failure
+            </summary>
+        </member>
+    </members>
+</doc>

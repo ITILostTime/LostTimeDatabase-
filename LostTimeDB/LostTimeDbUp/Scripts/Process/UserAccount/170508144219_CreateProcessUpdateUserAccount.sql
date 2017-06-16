@@ -5,7 +5,7 @@ CREATE PROCEDURE UpdateUserAccount
 	@UserID INT,
 	@UserPseudonym NVARCHAR(64),
 	@UserEmail NVARCHAR(64),
-	@UserPassword NVARCHAR(64)
+	@UserPassword varbinary(64)
 )
 AS
 BEGIN
@@ -13,6 +13,6 @@ BEGIN
 	SET
 		UserPseudonym = @UserPseudonym,
 		UserEmail = @UserEmail,
-		UserPassword = @UserPassword
+		[UserPassword] = @UserPassword
 	WHERE UserID = @UserID
 END

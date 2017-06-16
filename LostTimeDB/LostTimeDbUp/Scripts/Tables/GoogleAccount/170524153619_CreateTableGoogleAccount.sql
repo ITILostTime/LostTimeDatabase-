@@ -2,6 +2,6 @@
 
 CREATE TABLE UserGoogleIDToken
 (
-	UserGoogleID INT PRIMARY KEY,
+	UserGoogleID nvarchar(64) PRIMARY KEY,
 	UserGoogleToken NVARCHAR(64),
 )

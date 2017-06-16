@@ -10,7 +10,7 @@ namespace LostTimeDB
 
         public string UserEmail { get; set; }
 
-        public string UserPassword { get; set; }
+        public byte[] UserPassword { get; set; }
 
         public DateTime UserAccountCreationDate { get; set; }
 
@@ -18,6 +18,6 @@ namespace LostTimeDB
 
         public string UserGoogleToken { get; set; }
 
-        public int UserGoogleID { get; set; }
+        public string UserGoogleID { get; set; }
     }
 }
