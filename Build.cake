@@ -357,7 +357,7 @@ Task("GitHubTag")
 //////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("RunNUnitTest");
+    .IsDependentOn("PublishMyGet");
 
 //////////////////////////////////////////////
 // Execution

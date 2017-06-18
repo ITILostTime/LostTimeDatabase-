@@ -1,3 +1,7 @@
+### New in 0.6.0 (Released : 18/06/2017)
+ 
+DataBase ité 3 - 90% end. Add Process/View/Table News, Add View, Process UserAccount, Add script to order the file send to the front web
+ 
 ### New in 0.5.1 (Released : 16/06/2017)
  
 Patch CI with adding new Path of Projects and correc some bugs
