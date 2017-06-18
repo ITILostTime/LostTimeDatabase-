@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="DbUp" Version="3.3.5" />
+    <PackageReference Include="DbUp-sqlserver-scripting" Version="1.5.0" />
   </ItemGroup>
   
   <ItemGroup>

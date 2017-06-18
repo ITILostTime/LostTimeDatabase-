@@ -1,6 +1,6 @@
 /* Migration Script */
 
-CREATE VIEW ViewUserAccountFindByGoogleID
+CREATE VIEW ViewUserAccountFindByEmail
 AS
 	SELECT
 			UserID = s.UserID,

@@ -9,11 +9,11 @@ using Dapper;
 
 namespace LostTimeDB
 {
-    public class UserAccountGateaway
+    public class UserAccountGateway
     {
         readonly string _connectionString;
 
-        public UserAccountGateaway(string connectionString)
+        public UserAccountGateway(string connectionString)
         {
             _connectionString = connectionString;
         }
@@ -27,6 +27,7 @@ namespace LostTimeDB
                                 s.UserPseudonym,
                                 s.UserEmail,
                                 s.UserPassword,
+                                s.UserPermission,
                                 s.UserAccountCreationDate,
                                 s.UserLastConnectionDate,
                                 s.UserGoogleToken,
@@ -47,6 +48,7 @@ namespace LostTimeDB
                                 s.UserPseudonym,
                                 s.UserEmail,
                                 s.UserPassword,
+                                s.UserPermission,
                                 s.UserAccountCreationDate,
                                 s.UserLastConnectionDate,
                                 s.UserGoogleToken,
@@ -66,6 +68,7 @@ namespace LostTimeDB
                                 s.UserPseudonym,
                                 s.UserEmail,
                                 s.UserPassword,
+                                s.UserPermission,
                                 s.UserAccountCreationDate,
                                 s.UserLastConnectionDate,
                                 s.UserGoogleID,
@@ -73,6 +76,27 @@ namespace LostTimeDB
                         from ViewUserAccountFindByGoogleID s
                         where s.UserGoogleID = @UserGoogleID;",
                         new { UserGoogleID = userGoogleID })
+                        .FirstOrDefault();
+            }
+        }
+
+        public UserAccount FindByUserEmail(string userEmail)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                return connection.Query<UserAccount>(
+                    @"select    s.UserID,
+                                s.UserPseudonym,
+                                s.UserEmail,
+                                s.UserPassword,
+                                s.UserPermission,
+                                s.UserAccountCreationDate,
+                                s.UserLastConnectionDate,
+                                s.UserGoogleID,
+                                s.UserGoogleToken
+                        from ViewUserAccountFindByEmail s
+                        where s.UserEmail = @UserEmail;",
+                        new { UserEmail = userEmail })
                         .FirstOrDefault();
             }
         }
@@ -90,6 +114,7 @@ namespace LostTimeDB
                         UserPassword = userPassword,
                         UserAccountCreationDate = date,
                         UserLastConnectionDate = date,
+                        UserPermission = "USER"
                     },
                     commandType: CommandType.StoredProcedure);
             }
@@ -149,6 +174,36 @@ namespace LostTimeDB
                         UserPseudonym = userPseudonym,
                         UserEmail = userEmail,
                         UserPassword = userPassword
+                    },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public void UpdatePassword(string userEmail, byte[] userPassword)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Execute(
+                    "UpdatePassword",
+                    new
+                    {
+                        UserEmail = userEmail,
+                        UserPassword = userPassword
+                    },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public void UpdateUserPermission(int userID, string userPermission)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Execute(
+                    "UpdateUserPermission",
+                    new
+                    {
+                        UserID = userID,
+                        UserPermission = userPermission
                     },
                     commandType: CommandType.StoredProcedure);
             }

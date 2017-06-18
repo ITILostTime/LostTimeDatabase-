@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace LostTimeDBTest
 {
     [TestFixture]
-    public class UserAccountGateawayTest
+    public class UserAccountGatewayTest
     {
         readonly string _connectionstring = "Server=(local)\\SqlExpress; Database=LostTimeDB; Trusted_connection=true";
 
@@ -16,7 +16,7 @@ namespace LostTimeDBTest
         [Test]
         public void Create_Update_Delete_UserAccount()
         {
-            LostTimeDB.UserAccountGateaway userAccountGateaway = new LostTimeDB.UserAccountGateaway(_connectionstring);
+            LostTimeDB.UserAccountGateway userAccountGateaway = new LostTimeDB.UserAccountGateway(_connectionstring);
             LostTimeDB.UserAccount userAccount;
             LostTimeDB.UserAccount userAccount2;
 
@@ -32,11 +32,17 @@ namespace LostTimeDBTest
             userAccountGateaway.CreateNewUserAccount(testUserPseudonym, testUserEmail, testUserPassword, DateTime.Now);
 
             userAccount = userAccountGateaway.FindByName(testUserPseudonym);
-            CheckUserAccount(userAccount, userAccount.UserID, testUserPseudonym, testUserEmail, testUserPassword, userAccount.UserAccountCreationDate);
+            
+            Assert.That(userAccount.UserPseudonym, Is.EqualTo(testUserPseudonym));
+            Assert.That(userAccount.UserEmail, Is.EqualTo(testUserEmail));
+            Assert.That(userAccount.UserPassword, Is.EqualTo(testUserPassword));
 
             userAccountGateaway.UpdateUserAccount(userAccount.UserID, TestUserUpdatePseudonym, TestUserUpdateEmail, TestUserUpdatePassword);
             userAccount2 = userAccountGateaway.FindByName(TestUserUpdatePseudonym);
-            CheckUserAccount(userAccount2, userAccount2.UserID, TestUserUpdatePseudonym, TestUserUpdateEmail, TestUserUpdatePassword, userAccount2.UserAccountCreationDate);
+            
+            Assert.That(userAccount2.UserPseudonym, Is.EqualTo(TestUserUpdatePseudonym));
+            Assert.That(userAccount2.UserEmail, Is.EqualTo(TestUserUpdateEmail));
+            Assert.That(userAccount2.UserPassword, Is.EqualTo(TestUserUpdatePassword));
 
             userAccountGateaway.DeleteUserAccountByName(TestUserUpdatePseudonym);
             userAccount = userAccountGateaway.FindByName(TestUserUpdatePseudonym);
@@ -47,7 +53,7 @@ namespace LostTimeDBTest
         [Test]
         public void FindByID_DeleteByIDTest()
         {
-            LostTimeDB.UserAccountGateaway userAccountGateaway = new LostTimeDB.UserAccountGateaway(_connectionstring);
+            LostTimeDB.UserAccountGateway userAccountGateaway = new LostTimeDB.UserAccountGateway(_connectionstring);
             LostTimeDB.UserAccount userAccount;
             LostTimeDB.UserAccount userAccount2;
 
@@ -71,8 +77,8 @@ namespace LostTimeDBTest
         [Test]
         public void DeleteByGoogleIDTest()
         {
-            LostTimeDB.UserAccountGateaway userAccountGateaway = new LostTimeDB.UserAccountGateaway(_connectionstring);
-            LostTimeDB.GoogleAccountGateaway googleAccountGateaway = new LostTimeDB.GoogleAccountGateaway(_connectionstring);
+            LostTimeDB.UserAccountGateway userAccountGateaway = new LostTimeDB.UserAccountGateway(_connectionstring);
+            LostTimeDB.GoogleAccountGateway googleAccountGateaway = new LostTimeDB.GoogleAccountGateway(_connectionstring);
 
             LostTimeDB.UserAccount userAccount;
             LostTimeDB.UserAccount userAccount2;
@@ -104,13 +110,65 @@ namespace LostTimeDBTest
             googleAccountGateaway.DeleteGoogleAccountByGoogleID(googleID);
         }
 
-        void CheckUserAccount(LostTimeDB.UserAccount userAccount, int userID, string userPseudonym, string userEmail, byte[] userPassword, DateTime creationDate)
+        [Test]
+        public void FindByUserByEmailTest()
         {
-            Assert.That(userAccount.UserID, Is.EqualTo(userID));
-            Assert.That(userAccount.UserPseudonym, Is.EqualTo(userPseudonym));
-            Assert.That(userAccount.UserEmail, Is.EqualTo(userEmail));
-            Assert.That(userAccount.UserPassword, Is.EqualTo(userPassword));
-            Assert.That(userAccount.UserAccountCreationDate, Is.EqualTo(creationDate));
+            LostTimeDB.UserAccountGateway userAccountGtw = new LostTimeDB.UserAccountGateway(_connectionstring);
+            LostTimeDB.UserAccount userAccount;
+
+            userAccountGtw.CreateNewUserAccount("Pseudo", "userPseudonym@gmail.com", Guid.NewGuid().ToByteArray(), DateTime.Now);
+            userAccount = userAccountGtw.FindByUserEmail("userPseudonym@gmail.com");
+
+            Assert.That(userAccount.UserPseudonym, Is.EqualTo("Pseudo"));
+
+            userAccountGtw.DeleteUserAccountByName("Pseudo");
+
+            userAccount = userAccountGtw.FindByUserEmail("userPseudonym@gmail.com");
+
+            Assert.That(userAccount, Is.Null);
+        }
+
+        [Test]
+        public void UpdatePasswordTest()
+        {
+            LostTimeDB.UserAccountGateway UserAccGtw = new LostTimeDB.UserAccountGateway(_connectionstring);
+            LostTimeDB.UserAccount UserAcc;
+
+            byte[] firstPassword = Guid.NewGuid().ToByteArray();
+            UserAccGtw.CreateNewUserAccount("Pseudo", "Pseudo@gmail.com", firstPassword, DateTime.Now);
+            UserAcc = UserAccGtw.FindByUserEmail("Pseudo@gmail.com");
+            Assert.That(UserAcc.UserPseudonym, Is.EqualTo("Pseudo"));
+            Assert.That(UserAcc.UserPassword, Is.EqualTo(firstPassword));
+
+            byte[] secondPassword = Guid.NewGuid().ToByteArray();
+            UserAccGtw.UpdatePassword(UserAcc.UserEmail, secondPassword);
+            UserAcc = UserAccGtw.FindByName("Pseudo");
+            Assert.That(UserAcc.UserPassword, Is.EqualTo(secondPassword));
+
+            UserAccGtw.DeleteUserAccountByName("Pseudo");
+            UserAcc = UserAccGtw.FindByName("Pseudo");
+            Assert.That(UserAcc, Is.Null);
+        }
+
+        [Test]
+        public void UpdateUserPermissionTest()
+        {
+            LostTimeDB.UserAccountGateway UserAccGtw = new LostTimeDB.UserAccountGateway(_connectionstring);
+            LostTimeDB.UserAccount UserAcc;
+
+            byte[] firstPassword = Guid.NewGuid().ToByteArray();
+            UserAccGtw.CreateNewUserAccount("Pseudo", "Pseudo@gmail.com", firstPassword, DateTime.Now);
+            UserAcc = UserAccGtw.FindByUserEmail("Pseudo@gmail.com");
+            Assert.That(UserAcc.UserPseudonym, Is.EqualTo("Pseudo"));
+            Assert.That(UserAcc.UserPermission, Is.EqualTo("USER"));
+
+            UserAccGtw.UpdateUserPermission(UserAcc.UserID, "ADMIN");
+            UserAcc = UserAccGtw.FindByName("Pseudo");
+            Assert.That(UserAcc.UserPermission, Is.EqualTo("ADMIN"));
+
+            UserAccGtw.DeleteUserAccountByName("Pseudo");
+            UserAcc = UserAccGtw.FindByName("Pseudo");
+            Assert.That(UserAcc, Is.Null);
         }
     }
 }

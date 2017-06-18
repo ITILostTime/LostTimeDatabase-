@@ -9,11 +9,11 @@ using Dapper;
 
 namespace LostTimeDB
 {
-    public class GoogleAccountGateaway
+    public class GoogleAccountGateway
     {
         readonly string _connectionString;
 
-        public GoogleAccountGateaway(string connectionString)
+        public GoogleAccountGateway(string connectionString)
         {
             _connectionString = connectionString;
         }
@@ -58,6 +58,21 @@ namespace LostTimeDB
                     new
                     {
                         UserGoogleID = googleID
+                    },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public void UpdateGoogleToken(string userGoogleID, string userGoogleToken)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Execute(
+                    "UpdateUserGoogleToken",
+                    new
+                    {
+                        UserGoogleID = userGoogleID,
+                        UserGoogleToken = userGoogleToken
                     },
                     commandType: CommandType.StoredProcedure);
             }

@@ -12,6 +12,8 @@ namespace LostTimeDB
 
         public byte[] UserPassword { get; set; }
 
+        public string UserPermission { get; set; }
+
         public DateTime UserAccountCreationDate { get; set; }
 
         public DateTime UserLastConnectionDate { get; set; }
