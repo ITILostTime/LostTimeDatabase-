@@ -178,13 +178,14 @@ namespace LostTimeDBTest
             LostTimeDB.UserAccount user2;
 
             int i = 0;
-
-            IEnumerable<LostTimeDB.UserAccount> user = gtw.GetAll();
+            
 
             for (i = 0; i < 5; i++)
             {
                 gtw.CreateNewUserAccount("User" + i, "User" + i + "gmail.com", Guid.NewGuid().ToByteArray(), DateTime.Now);
             }
+
+            IEnumerable<LostTimeDB.UserAccount> user = gtw.GetAll();
 
             i = 0;
 

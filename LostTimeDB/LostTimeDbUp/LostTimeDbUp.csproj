@@ -13,5 +13,17 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\**\*.sql" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Remove="Scripts\Views\UserAccount\170703103605_CreateViewTableUserAccountGetAllUserAccount.sql" />
+    <EmbeddedResource Remove="Scripts\Views\UserAccount\170703115600_CreateViewTableUserAccountGetAllUserAccount.sql" />
+    <EmbeddedResource Remove="Scripts\Views\UserAccount\170703134154_CreateViewTableUserAccountGetAllUserAccount.sql" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Scripts\Views\UserAccount\170703103605_CreateViewTableUserAccountGetAllUserAccount.sql" />
+    <None Remove="Scripts\Views\UserAccount\170703115600_CreateViewTableUserAccountGetAllUserAccount.sql" />
+    <None Remove="Scripts\Views\UserAccount\170703134154_CreateViewTableUserAccountGetAllUserAccount.sql" />
+  </ItemGroup>
 
 </Project>

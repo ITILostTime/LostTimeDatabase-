@@ -1,3 +1,11 @@
+### New in 0.7.0 (Released : 03/07/2017)
+ 
+Add Quest Table, Process, View to work with json
+ 
+### New in 0.6.1 (Released : 03/07/2017)
+ 
+Test Quest Table/Process/View
+ 
 ### New in 0.6.0 (Released : 18/06/2017)
  
 DataBase ité 3 - 90% end. Add Process/View/Table News, Add View, Process UserAccount, Add script to order the file send to the front web
