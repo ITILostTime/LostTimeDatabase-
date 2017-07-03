@@ -1,3 +1,7 @@
+### New in 0.7.1 (Released : 03/07/2017)
+ 
+Put all sql script in the same folder
+ 
 ### New in 0.7.0 (Released : 03/07/2017)
  
 Add Quest Table, Process, View to work with json
