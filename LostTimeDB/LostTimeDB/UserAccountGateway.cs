@@ -18,6 +18,24 @@ namespace LostTimeDB
             _connectionString = connectionString;
         }
 
+        public IEnumerable<UserAccount> GetAll()
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return con.Query<UserAccount>(
+                    @"select s.UserID,
+                             s.UserPseudonym,
+                             s.UserEmail,
+                             s.UserPassword,
+                             s.UserPermission,
+                             s.UserAccountCreationDate,
+                             s.UserLastConnectionDate,
+                             s.UserGoogleID,
+                             s.UserGoogleToken
+                      from GetAllUserAccount s;");
+            }
+        }
+
         public UserAccount FindByName(string userPseudonym)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))

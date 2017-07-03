@@ -170,5 +170,43 @@ namespace LostTimeDBTest
             UserAcc = UserAccGtw.FindByName("Pseudo");
             Assert.That(UserAcc, Is.Null);
         }
+
+        [Test]
+        public void GetAllUserAccountTest()
+        {
+            LostTimeDB.UserAccountGateway gtw = new LostTimeDB.UserAccountGateway(_connectionstring);
+            LostTimeDB.UserAccount user2;
+
+            int i = 0;
+
+            IEnumerable<LostTimeDB.UserAccount> user = gtw.GetAll();
+
+            for (i = 0; i < 5; i++)
+            {
+                gtw.CreateNewUserAccount("User" + i, "User" + i + "gmail.com", Guid.NewGuid().ToByteArray(), DateTime.Now);
+            }
+
+            i = 0;
+
+            foreach(LostTimeDB.UserAccount n in user)
+            {
+
+                Assert.That(n.UserPseudonym, Is.EqualTo("User" + i));
+                Assert.That(n.UserEmail, Is.EqualTo("User" + i + "gmail.com"));
+
+                i++;
+            }
+
+            i = 0;
+
+            foreach (LostTimeDB.UserAccount n in user)
+            {
+                gtw.DeleteUserAccountByName(n.UserPseudonym);
+                user2 = gtw.FindByName("User" + i);
+                Assert.That(user2, Is.Null);
+
+                i++;
+            }
+        }
     }
 }
