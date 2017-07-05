@@ -75,5 +75,48 @@ namespace LostTimeDBTest
             quest = gtw.FindQuestBYQuestID(quest.QuestID);
             Assert.That(quest, Is.Null);
         }
+
+        [Test]
+        public void FindQuestByQuestTitleTest()
+        {
+            LostTimeDB.QuestGateway gtw = new LostTimeDB.QuestGateway(_connectionstring);
+            LostTimeDB.Quest quest = new LostTimeDB.Quest();
+
+            gtw.CreateQuest("title", "test", 1);
+            quest = gtw.FindQuestBYQuestTitle("title");
+
+            Assert.That(quest.QuestData, Is.EqualTo("test"));
+            Assert.That(quest.AuthorID, Is.EqualTo(1));
+
+            gtw.DeleteQuestByQuestID(quest.QuestID);
+            quest = gtw.FindQuestBYQuestTitle("title");
+            Assert.That(quest, Is.Null);
+
+        }
+
+        [Test]
+        public void GetALLBYAuthorIDTest()
+        {
+            LostTimeDB.QuestGateway gtw = new LostTimeDB.QuestGateway(_connectionstring);
+            LostTimeDB.Quest quest = new LostTimeDB.Quest();
+
+            for(int x = 0; x < 5; x++)
+            {
+                gtw.CreateQuest("title" + x, "QuestData" + x, x);
+                gtw.CreateQuest("title" + x, "QuestData" + x, 5);
+            }
+            IEnumerable<LostTimeDB.Quest> qt = gtw.GetAll();
+            IEnumerable<LostTimeDB.Quest> Qst = gtw.GetAllByAuthorID(5);
+
+            foreach(LostTimeDB.Quest n in Qst)
+            {
+                Assert.That(n.AuthorID, Is.EqualTo(5));
+            }
+
+            foreach(LostTimeDB.Quest n in qt)
+            {
+                gtw.DeleteQuestByQuestID(n.QuestID);
+            }
+        }
     }
 }

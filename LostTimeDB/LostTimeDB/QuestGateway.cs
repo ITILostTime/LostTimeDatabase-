@@ -66,6 +66,23 @@ namespace LostTimeDB
             }
         }
 
+        public Quest FindQuestBYQuestTitle(string questTitle)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                return connection.Query<Quest>(
+                    @"select    s.QuestID,
+                                s.QuestTitle,
+                                s.QuestData,
+                                s.QuestLastEdit,
+                                s.AuthorID
+                        from FindQuestByQuestTitle s
+                        where s.QuestTitle = @QuestTitle ;",
+                        new { QuestTitle = questTitle })
+                        .FirstOrDefault();
+            }
+        }
+
         public IEnumerable<Quest> GetAll()
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -78,6 +95,25 @@ namespace LostTimeDB
                                 s.AuthorID
                       from GetAllQuest s;");
             }
+        }
+
+        public IEnumerable<Quest> GetAllByAuthorID(int authorID)
+        {
+            IEnumerable<Quest> IEQuest = GetAll();
+
+            List<Quest> questList = IEQuest.ToList();
+            List<Quest> questListbyAuthorID = new List<Quest>();
+
+            foreach(Quest n in questList)
+            {
+                if(n.AuthorID == authorID)
+                {
+                    questListbyAuthorID.Add(n);
+                }
+            }
+
+            IEQuest = questListbyAuthorID.AsEnumerable<Quest>();
+            return IEQuest;
         }
 
         public void UpdateQuest(int questID, string questTitle, string questData, int authorID)

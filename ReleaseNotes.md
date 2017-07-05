@@ -1,3 +1,7 @@
+### New in 0.7.2 (Released : 05/07/2017)
+ 
+Add View GetALL by authorID and view get quest by title
+ 
 ### New in 0.7.1 (Released : 03/07/2017)
  
 Put all sql script in the same folder
